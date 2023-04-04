@@ -11,11 +11,15 @@ Player::Player(Vector2f positionOfFirstCard, shared_ptr<GraphicsHelper> graphics
 
 void Player::takeCards(vector<shared_ptr<Card>>& cards)
 {
+	for (int i = 0; i < this->cards.size(); i++)
+	{
+		graphics->setPositionRelativeToCardSize(this->cards[i].sprite, PositionOfFirstCard.x + i * 30, PositionOfFirstCard.y);
+	}
 	for (auto card : cards)
 	{
 		CardSprite cardSprite = CardSprite(card, make_shared<Sprite>((*graphics->backCardSideTexture)));
 		graphics->scaleCardSize(cardSprite.sprite);
-		graphics->setPositionRelativeToCardSize(cardSprite.sprite, PositionOfFirstCard.x + this->cards.size()*30, PositionOfFirstCard.y);
+		graphics->setPositionRelativeToCardSize(cardSprite.sprite, PositionOfFirstCard.x + this->cards.size() * 30, PositionOfFirstCard.y);
 		this->cards.push_back(cardSprite);
 	}
 }
@@ -55,7 +59,7 @@ bool Player::tryCanCancelBeingSkipped(shared_ptr<Card>& cancellingCard, shared_p
 CardFunctionColor Player::getRandomColor()
 {
 	const int numberOfColors = 4;
-	CardFunctionColor colors [numberOfColors] = { CardFunctionColor::leaf, CardFunctionColor::bell, CardFunctionColor::heart, CardFunctionColor::acorn };
+	CardFunctionColor colors[numberOfColors] = { CardFunctionColor::leaf, CardFunctionColor::bell, CardFunctionColor::heart, CardFunctionColor::acorn };
 	int randomNumber = Helper::randomInRange(numberOfColors);
 	return (colors[randomNumber]);
 }
@@ -66,7 +70,10 @@ bool Player::tryPlayACard(shared_ptr<Card>& cardToPlay, shared_ptr<Card> topDeck
 
 	if ((*topHasBeenPlayed))
 	{
-		colorToPlay = (*colorToBePlayed);
+		if (colorToBePlayed)
+		{
+			colorToPlay = (*colorToBePlayed);
+		}
 	}
 
 	if (tryReturnCardOfColorAndNumber(topDeckCard->Color, CardFunctionNumber::seven, cardToPlay))
@@ -79,12 +86,6 @@ bool Player::tryPlayACard(shared_ptr<Card>& cardToPlay, shared_ptr<Card> topDeck
 		return true;
 	}
 
-	if (tryReturnCardOfNumber(CardFunctionNumber::top, cardToPlay))
-	{
-		colorToBePlayed = make_shared<CardFunctionColor>(getRandomColor());
-		return true;
-	}
-
 	if (tryReturnCardOfColor(colorToPlay, cardToPlay))
 	{
 		return true;
@@ -92,6 +93,12 @@ bool Player::tryPlayACard(shared_ptr<Card>& cardToPlay, shared_ptr<Card> topDeck
 
 	if (tryReturnCardOfNumber(topDeckCard->Number, cardToPlay))
 	{
+		return true;
+	}
+
+	if (tryReturnCardOfNumber(CardFunctionNumber::top, cardToPlay))
+	{
+		colorToBePlayed = make_shared<CardFunctionColor>(getRandomColor());
 		return true;
 	}
 
@@ -145,11 +152,16 @@ void Player::removeCard(shared_ptr<Card> cardToRemove)
 	{
 		if (cardToRemove->Color != cards[i].card->Color || cardToRemove->Number != cards[i].card->Number)
 		{
-			graphics->setPositionRelativeToCardSize(cards[i].sprite, PositionOfFirstCard.x + i * 20, PositionOfFirstCard.y);
 			newHand.push_back(cards[i]);
 		}
 	}
 	cards = newHand;
+
+	for (int i = 0; i < cards.size(); i++)
+	{
+		graphics->setPositionRelativeToCardSize(cards[i].sprite, PositionOfFirstCard.x + i * 20, PositionOfFirstCard.y);
+	}
+
 	if (cards.empty())
 	{
 		hasFinished = true;

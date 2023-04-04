@@ -16,7 +16,7 @@ GameManager::GameManager(int numberOfPlayers, shared_ptr<Deck> deck, shared_ptr<
 	RealPlayer = make_shared<HumanPlayer>(HumanPlayer(Vector2f(graphics->ScreenWidth / 2 - 300, graphics->ScreenHeight - 200), graphics, deck));
 	Players.push_back(RealPlayer);
 	
-	vector<Vector2f> positionOfFirstCardSpriteOfPlayer{ Vector2f(200, 200), Vector2f(graphics->ScreenWidth - 200, 200), Vector2f(graphics->ScreenWidth/2, 200)};
+	vector<Vector2f> positionOfFirstCardSpriteOfPlayer{ Vector2f(200, 200), Vector2f(graphics->ScreenWidth/2, 200), Vector2f(graphics->ScreenWidth - 300, 200) };
 
 	for (int i = 0; i < numberOfPlayers-1; i++)
 	{
@@ -110,7 +110,6 @@ void GameManager::evaluatePlayedCard(shared_ptr<Card> card)
 void GameManager::playOneTurn()
 {
 	//makes the player on turn play
-	//if it is the human player, nothing happens and waits for the player input
 	if (NumberOfPlayers <= 1)
 	{
 		return;

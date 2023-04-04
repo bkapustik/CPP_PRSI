@@ -13,13 +13,14 @@ private:
 	bool tryReturnCardOfColor(CardFunctionColor color, shared_ptr<Card>& card);
 	bool tryReturnCardOfNumber(CardFunctionNumber number, shared_ptr<Card>& card);
 	bool tryReturnCardOfColorAndNumber(CardFunctionColor color, CardFunctionNumber number, shared_ptr<Card>& cardToReturn);
-	CardFunctionColor getRandomColor();
+	
 
 public:
 	bool hasFinished;
 
+	CardFunctionColor getRandomColor();
 	
-	bool virtual tryPlayACard(shared_ptr<Card>& cardToPlay, shared_ptr<Card> topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor> colorToBePlayed, int cardsToTake, int turnsToWait)
+	bool virtual tryPlayACard(shared_ptr<Card>& cardToPlay, shared_ptr<Card> topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait)
 	{
 		return false;
 	}

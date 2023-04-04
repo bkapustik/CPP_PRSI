@@ -8,6 +8,10 @@ HumanPlayer::HumanPlayer(Vector2f positionOfFirstCard, shared_ptr<GraphicsHelper
 
 void HumanPlayer::takeCards(vector<shared_ptr<Card>>& cards)
 {
+	for (int i = 0; i < this->cards.size(); i++)
+	{
+		graphics->setPositionRelativeToCardSize(this->cards[i].sprite, PositionOfFirstCard.x + i * 100, PositionOfFirstCard.y);
+	}
 	for (auto card : cards)
 	{
 		CardSprite cardSprite = CardSprite(card, make_shared<Sprite>((*card->Texture)));
@@ -25,11 +29,16 @@ void HumanPlayer::removeCard(shared_ptr<Card> cardToRemove)
 	{
 		if (cardToRemove->Color != cards[i].card->Color || cardToRemove->Number != cards[i].card->Number)
 		{
-			graphics->setPositionRelativeToCardSize(cards[i].sprite, PositionOfFirstCard.x + i * 100, PositionOfFirstCard.y);
 			newHand.push_back(cards[i]);
 		}
 	}
 	cards = newHand;
+
+	for (int i = 0; i < cards.size(); i++)
+	{
+		graphics->setPositionRelativeToCardSize(cards[i].sprite, PositionOfFirstCard.x + i * 100, PositionOfFirstCard.y);
+	}
+
 	if (cards.empty())
 	{
 		hasFinished = true;
@@ -38,13 +47,11 @@ void HumanPlayer::removeCard(shared_ptr<Card> cardToRemove)
 
 bool HumanPlayer::isSpriteClicked(shared_ptr<Sprite> sprite)
 {
-	//cout << "this is mouse " << Mouse::getPosition().x << endl;
-	//cout << "this is sprite " << sprite->getPosition().x << " this is size " << sprite->getScale().x << endl;
-
 	if (Mouse::getPosition().x > sprite->getPosition().x
 		&& Mouse::getPosition().x < sprite->getPosition().x + graphics->CardWidth
 		&& Mouse::getPosition().y > sprite->getPosition().y
-		&& Mouse::getPosition().y < sprite->getPosition().y + graphics->CardHeight)
+		&& Mouse::getPosition().y < sprite->getPosition().y + graphics->CardHeight
+		&& Mouse::isButtonPressed(Mouse::Left))
 	{
 		return true;
 	}
@@ -59,11 +66,18 @@ bool HumanPlayer::wantsCustomTurn()
 	return true;
 }
 
-bool HumanPlayer::canUseThisCard(shared_ptr<CardSprite> card, shared_ptr<Card> topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor> colorToBePlayed, int cardsToTake, int turnsToWait)
+bool HumanPlayer::canUseThisCard(shared_ptr<CardSprite> card, shared_ptr<Card> topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait)
 {
 	if ((*topHasBeenPlayed))
 	{
-		if (card->card->Color == (*colorToBePlayed))
+		if (colorToBePlayed)
+		{
+			if (card->card->Color == (*colorToBePlayed))
+			{
+				return true;
+			}
+		}
+		if (card->card->Number == CardFunctionNumber::top)
 		{
 			return true;
 		}
@@ -112,7 +126,7 @@ bool HumanPlayer::tryTakeACard()
 	return false;
 }
 
-bool HumanPlayer::tryPlayACard(shared_ptr<Card>& cardToPlay, shared_ptr<Card> topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor> colorToBePlayed, int cardsToTake, int turnsToWait)
+bool HumanPlayer::tryPlayACard(shared_ptr<Card>& cardToPlay, shared_ptr<Card> topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait)
 {
 	for (auto card : cards)
 	{
@@ -121,6 +135,10 @@ bool HumanPlayer::tryPlayACard(shared_ptr<Card>& cardToPlay, shared_ptr<Card> to
 			if (canUseThisCard(make_shared<CardSprite>(card), topDeckCard, topHasBeenPlayed, colorToBePlayed, cardsToTake, turnsToWait))
 			{
 				cardToPlay = card.card;
+				if (card.card->Number == CardFunctionNumber::top)
+				{
+					colorToBePlayed = make_shared<CardFunctionColor>(getRandomColor());
+				}
 				return true;
 			}
 		}

@@ -27,7 +27,7 @@ private:
 	void shuffle(vector<shared_ptr<Card>>& cards);
 	vector<shared_ptr<Card>> cardsToVector();
 	void vectorToQueue(vector<shared_ptr<Card>>& cards);
-	shared_ptr<Card> dequeue();
+	shared_ptr<Card> deque();
 	Vector2f PositionOfFirstCard;
 	
 	void changeShownCard();

@@ -20,6 +20,8 @@ int main()
 
 	float screenWidth = 1920;
 	float screenHeight = 1080;
+
+	float secondsToWaitBetweenEachRound = 0.5;
 	auto cardBackSide = opener.getCardBackSide();
 
 	auto graphics = make_shared<GraphicsHelper>(2, 2, screenWidth, screenHeight, cards[0], opener.getCardBackSide());
@@ -47,9 +49,10 @@ int main()
 			else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && !gameManager.userInputReceived)
 			{
 				gameManager.playOneTurn();
+				clock.restart();
 			}
 		}
-		if (clock.getElapsedTime() > seconds(1))
+		if (clock.getElapsedTime() > seconds(secondsToWaitBetweenEachRound) && gameManager.userInputReceived)
 		{
 			gameManager.playOneTurn();
 			clock.restart();
