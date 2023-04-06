@@ -117,7 +117,16 @@ shared_ptr<Texture> Opener::getCardBackSide()
 	const string backSideImage = "back.jpg";
 	auto pathParts = vector<string>{ texturesRoot, cardBackSideRoot, backSideImage };
 	string path = buildPath(pathParts);
-	shared_ptr<Texture> texture = make_shared<Texture>(Texture());
+	auto texture = make_unique<Texture>(Texture());
+	texture->loadFromFile(path);
+	return texture;
+}
+
+unique_ptr<Texture> Opener::getMenuTexture(string startImage)
+{
+	auto pathParts = vector<string>{ texturesRoot, menuRoot, startImage };
+	unique_ptr<Texture> texture = make_unique<Texture>(Texture());
+	string path = buildPath(pathParts);
 	texture->loadFromFile(path);
 	return texture;
 }

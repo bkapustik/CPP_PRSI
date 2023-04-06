@@ -16,7 +16,6 @@ private:
 	int PlayerOnTurn;
 	int CardsToTake;
 	int NumberOfPlayersSkippedByAce;
-	bool PlayerHasFinished;
 
 	shared_ptr<GraphicsHelper> graphics;
 
@@ -38,5 +37,6 @@ public :
 	vector<shared_ptr<Player>> Players;
 	void evaluatePlayerPressEvent();
 	void playOneTurn();
+	bool PlayerHasFinished;
 };
 

@@ -202,5 +202,6 @@ void GameManager::playOneTurn()
 			PlayerOnTurn++;
 		}
 		playerOnTurn->cancelIsOnTurn();
+		//if (RealPlayer)
 	}
 }

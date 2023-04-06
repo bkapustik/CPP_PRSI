@@ -144,6 +144,7 @@
     <ClCompile Include="ComputerPlayer.cpp" />
     <ClCompile Include="Deck.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="GameMenu.cpp" />
     <ClCompile Include="GraphicsHelper.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="HumanPlayer.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="GraphicsHelper.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="HumanPlayer.h" />
+    <ClInclude Include="GameMenu.h" />
     <ClInclude Include="Opener.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>
