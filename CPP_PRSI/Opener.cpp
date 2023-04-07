@@ -80,6 +80,11 @@ Opener::Opener()
 	rootPath = buildPath(vector<string>{ texturesRoot, cardRoot });
 }
 
+void Opener::operator=(const Opener& opener)
+{
+	*this = opener;
+}
+
 string Opener::getBackgroundPath()
 {
 	const string backgroundImage = "2796727.jpg";

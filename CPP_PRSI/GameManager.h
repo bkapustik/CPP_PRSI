@@ -31,12 +31,13 @@ private:
 	void removeFinishedPlayer(shared_ptr<Player> player);
 	void evaluatePlayedCard(shared_ptr<Card> card);
 public : 
+	GameManager();
 	GameManager(int numberOfPlayers, shared_ptr<Deck> deck, shared_ptr<GraphicsHelper> graphicsHelper);
 	
 	bool userInputReceived = true;
 	vector<shared_ptr<Player>> Players;
 	void evaluatePlayerPressEvent();
 	void playOneTurn();
-	bool PlayerHasFinished;
+	bool PlayerHasFinished = false;
 };
 

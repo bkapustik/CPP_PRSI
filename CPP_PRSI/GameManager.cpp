@@ -1,5 +1,10 @@
 #include "GameManager.h"
 
+GameManager::GameManager()
+{
+	
+}
+
 GameManager::GameManager(int numberOfPlayers, shared_ptr<Deck> deck, shared_ptr<GraphicsHelper> graphicsHelper)
 {
 	numberOfPlayers = 4;
@@ -202,6 +207,10 @@ void GameManager::playOneTurn()
 			PlayerOnTurn++;
 		}
 		playerOnTurn->cancelIsOnTurn();
-		//if (RealPlayer)
+
+		if (RealPlayer->hasFinished)
+		{
+			PlayerHasFinished = true;
+		}
 	}
 }

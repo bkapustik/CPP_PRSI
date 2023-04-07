@@ -1,25 +1,87 @@
 #include "GameMenu.h"
 
-Menu::Menu(float width, float height, unique_ptr<Texture> startTexture, unique_ptr<Texture> restartTexture)
+Menu::Menu(float screenWidth, float screenHeight, shared_ptr<RenderWindow> window, float secondsToWaitBetweenEachRound, shared_ptr<Clock> clock)
 {
-	this->startTexture = move(startTexture);
-	this->restartTexture = move(restartTexture);
-	this->menuButton = Sprite(*this->startTexture);
-	this->menuButton.setPosition((width - this->startTexture->getSize().x) / 2, (height - this->startTexture->getSize().y) / 2);
+	this->clock = clock;
+	this->screenWidth = screenWidth;
+	this->screenHeight = screenHeight;
+	this->secondsToWaitBetweenEachRound = secondsToWaitBetweenEachRound;
+	this->window = window;
+	cards = opener.getCards();
+	cardBackSide = opener.getCardBackSide();
+	graphics = make_shared<GraphicsHelper>(2, 2, screenWidth, screenHeight, cards[0], opener.getCardBackSide());
+
+	deck = make_shared<Deck>(Deck(cards, graphics));
+	this->gameManager = GameManager(4, deck, graphics);
+
+	backgroundTexture = opener.getBackgroundTexture();
+	background = Sprite(backgroundTexture);
+
+	startTexture = move(opener.getMenuTexture("start.png"));
+	restartTexture = move(opener.getMenuTexture("restart.png"));
+
+	menuButton = Sprite(*this->startTexture);
+	menuButton.setPosition((screenWidth - this->startTexture->getSize().x) / 2, (screenHeight - this->startTexture->getSize().y) / 2);
 }
 
-bool Menu::isSpriteClicked()
+void Menu::doAction()
 {
-	if (Mouse::getPosition().x > menuButton.getPosition().x
-		&& Mouse::getPosition().x < menuButton.getPosition().x + this->menuButton.getTexture()->getSize().x
-		&& Mouse::getPosition().y > menuButton.getPosition().y
-		&& Mouse::getPosition().y < menuButton.getPosition().y + this->menuButton.getTexture()->getSize().y
-		&& Mouse::isButtonPressed(Mouse::Left))
+	tryRestart();
+}
+
+void Menu::displayGame()
+{
+	if (clock->getElapsedTime() > seconds(secondsToWaitBetweenEachRound) && gameManager.userInputReceived)
 	{
-		return true;
+		gameManager.playOneTurn();
+		if (gameManager.Players.size() <= 1)
+		{
+			gameState = playerLost;
+		}
+		clock->restart();
+	}
+
+	window->draw((*deck->frontDeckCard));
+
+	for (auto sprite : deck->sprites)
+	{
+		window->draw((*sprite));
+	}
+
+	for (auto player : gameManager.Players)
+	{
+		for (auto card : player->cards)
+		{
+			window->draw((*card.sprite));
+		}
+	}
+}
+
+void Menu::tryRestart()
+{
+	if (Click::isClicked(menuButton))
+	{
+		deck = make_shared<Deck>(Deck(cards, graphics));
+		this->gameManager = GameManager(4, deck, graphics);
+		gameState = playing;
+		menuButton = Sprite(*this->restartTexture);
+		menuButton.setPosition((screenWidth - this->startTexture->getSize().x) / 2, (screenHeight - this->startTexture->getSize().y) / 2);
+	}
+}
+
+void Menu::render()
+{
+	if (gameState == playing)
+	{
+		displayGame();
 	}
 	else
 	{
-		return false;
+		displayMenu();
 	}
+}
+
+void Menu::displayMenu()
+{
+	window->draw(menuButton);
 }

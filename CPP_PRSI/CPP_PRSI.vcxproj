@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="CardSprite.cpp" />
+    <ClCompile Include="Click.cpp" />
     <ClCompile Include="ComputerPlayer.cpp" />
     <ClCompile Include="Deck.cpp" />
     <ClCompile Include="GameManager.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="CardFunctionNumber.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="CardSprite.h" />
+    <ClInclude Include="Click.h" />
     <ClInclude Include="ComputerPlayer.h" />
     <ClInclude Include="Deck.h" />
     <ClInclude Include="GameManager.h" />

@@ -26,6 +26,7 @@ private:
 
 public:
 	Opener();
+	void operator=(const Opener& opener);
 	unique_ptr<Texture> getMenuTexture(string startImage);
 	string getBackgroundPath();
 	vector<shared_ptr<Card>> getCards();
