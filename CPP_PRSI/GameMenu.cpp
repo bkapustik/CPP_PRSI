@@ -12,7 +12,10 @@ Menu::Menu(float screenWidth, float screenHeight, shared_ptr<RenderWindow> windo
 	graphics = make_shared<GraphicsHelper>(2, 2, screenWidth, screenHeight, cards[0], opener.getCardBackSide());
 
 	deck = make_shared<Deck>(Deck(cards, graphics));
-	this->gameManager = GameManager(4, deck, graphics);
+	isHumanChoosingColor = make_shared<bool>(false);
+	colorSprites = opener.getColorSprites(screenWidth, screenHeight);
+
+	this->gameManager = GameManager(4, deck, graphics, isHumanChoosingColor, colorSprites);
 
 	backgroundTexture = opener.getBackgroundTexture();
 	background = Sprite(backgroundTexture);
@@ -22,11 +25,6 @@ Menu::Menu(float screenWidth, float screenHeight, shared_ptr<RenderWindow> windo
 
 	menuButton = Sprite(*this->startTexture);
 	menuButton.setPosition((screenWidth - this->startTexture->getSize().x) / 2, (screenHeight - this->startTexture->getSize().y) / 2);
-}
-
-void Menu::doAction()
-{
-	tryRestart();
 }
 
 void Menu::displayGame()
@@ -57,21 +55,36 @@ void Menu::displayGame()
 	}
 }
 
+void Menu::displayColorOptions()
+{
+	for (auto colorOption : gameManager.colorSprites)
+	{
+		window->draw((*colorOption->sprite));
+	}
+}
+
 void Menu::tryRestart()
 {
-	if (Click::isClicked(menuButton))
+	if (gameState != playing)
 	{
-		deck = make_shared<Deck>(Deck(cards, graphics));
-		this->gameManager = GameManager(4, deck, graphics);
-		gameState = playing;
-		menuButton = Sprite(*this->restartTexture);
-		menuButton.setPosition((screenWidth - this->startTexture->getSize().x) / 2, (screenHeight - this->startTexture->getSize().y) / 2);
+		if (Click::isClicked(menuButton))
+		{
+			deck = make_shared<Deck>(Deck(cards, graphics));
+			this->gameManager = GameManager(4, deck, graphics, isHumanChoosingColor, colorSprites);
+			gameState = playing;
+			menuButton = Sprite(*this->restartTexture);
+			menuButton.setPosition((screenWidth - this->startTexture->getSize().x) / 2, (screenHeight - this->startTexture->getSize().y) / 2);
+		}
 	}
 }
 
 void Menu::render()
 {
-	if (gameState == playing)
+	if ((*this->isHumanChoosingColor))
+	{
+		displayColorOptions();
+	}
+	else if (gameState == playing)
 	{
 		displayGame();
 	}

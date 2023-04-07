@@ -127,6 +127,41 @@ shared_ptr<Texture> Opener::getCardBackSide()
 	return texture;
 }
 
+vector<shared_ptr<ColorSprite>> Opener::getColorSprites(float screenWidth, float screenHeight)
+{
+	vector<string> colors = vector<string>({ "Acorns","Balls","Green","Heart" });
+	vector<shared_ptr<ColorSprite>> cardColors = vector<shared_ptr<ColorSprite>>();
+
+	for (auto color : colors)
+	{
+		string path = buildPath(vector<string>{ texturesRoot, colorRoot, color + ".jpg" });
+
+		auto texture = make_unique<Texture>(Texture());
+		texture->loadFromFile(path);
+
+		auto cardColor = make_shared<ColorSprite>(nameToColor(color), move(texture));
+		cardColors.push_back(cardColor);
+	}
+
+	int colorOptionWidth = 200;
+	int colorOptionHeight = colorOptionWidth * 2;
+
+	int spaceBetweenColorOptions = 50;
+
+	float xPositionRelativeToCenter = -(colorOptionWidth * 2 + spaceBetweenColorOptions * 1.5);
+
+	for (int i = 0; i < cardColors.size(); i++)
+	{
+		cardColors[i]->sprite->setTextureRect(IntRect(Vector2i(0, 0), Vector2i(colorOptionWidth, colorOptionHeight)));
+
+		cardColors[i]->sprite->setPosition((screenWidth / 2) + xPositionRelativeToCenter, (screenHeight - colorOptionHeight) / 2);
+	
+		xPositionRelativeToCenter += colorOptionWidth + spaceBetweenColorOptions;
+	}
+
+	return cardColors;
+}
+
 unique_ptr<Texture> Opener::getMenuTexture(string startImage)
 {
 	auto pathParts = vector<string>{ texturesRoot, menuRoot, startImage };

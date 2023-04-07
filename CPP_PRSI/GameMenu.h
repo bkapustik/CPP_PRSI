@@ -13,9 +13,9 @@ enum GameState
 class Menu
 {
 private:
-	void tryRestart();
 	void displayMenu();
 	void displayGame();
+	void displayColorOptions();
 
 	float screenWidth;
 	float screenHeight;
@@ -24,7 +24,8 @@ private:
 	Texture backgroundTexture;
 	Sprite menuButton;
 	vector<shared_ptr<Card>> cards;
-	
+	vector<shared_ptr<ColorSprite>> colorSprites;
+
 	unique_ptr<Texture> startTexture;
 	unique_ptr<Texture> restartTexture;
 	
@@ -32,10 +33,12 @@ private:
 	shared_ptr<Deck> deck;
 	shared_ptr<GraphicsHelper> graphics;
 	shared_ptr<Texture> cardBackSide;
+	shared_ptr<bool> isHumanChoosingColor;
+	
 public:
 	Menu(float width, float height, shared_ptr<RenderWindow> window, float secondsToWaitBetweenEachRound, shared_ptr<Clock> clock);
 	void render();
-	void doAction();
+	void tryRestart();
 	GameState gameState;
 	GameManager gameManager;
 	Sprite background;

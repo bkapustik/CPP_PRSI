@@ -18,7 +18,6 @@ private:
 	int NumberOfPlayersSkippedByAce;
 
 	shared_ptr<GraphicsHelper> graphics;
-
 	shared_ptr<bool> TopHasBeenPlayed;
 	shared_ptr<CardFunctionColor> ColorToBePlayed;
 
@@ -30,13 +29,12 @@ private:
 	void giveNCardsToPlayer(shared_ptr<Player> player, int n);
 	void removeFinishedPlayer(shared_ptr<Player> player);
 	void evaluatePlayedCard(shared_ptr<Card> card);
-public : 
+public:
 	GameManager();
-	GameManager(int numberOfPlayers, shared_ptr<Deck> deck, shared_ptr<GraphicsHelper> graphicsHelper);
-	
+	GameManager(int numberOfPlayers, shared_ptr<Deck> deck, shared_ptr<GraphicsHelper> graphicsHelper, shared_ptr<bool> choosingColor, vector<shared_ptr<ColorSprite>> colorSprites);
 	bool userInputReceived = true;
+	vector<shared_ptr<ColorSprite>> colorSprites;
 	vector<shared_ptr<Player>> Players;
-	void evaluatePlayerPressEvent();
 	void playOneTurn();
 	bool PlayerHasFinished = false;
 };

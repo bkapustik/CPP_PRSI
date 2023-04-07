@@ -1,11 +1,25 @@
 #include "HumanPlayer.h"
 #include <iostream>
 
-HumanPlayer::HumanPlayer(Vector2f positionOfFirstCard, shared_ptr<GraphicsHelper> graphics, shared_ptr<Deck> deck) : Player(positionOfFirstCard, graphics)
+HumanPlayer::HumanPlayer(Vector2f positionOfFirstCard, shared_ptr<GraphicsHelper> graphics, shared_ptr<Deck> deck, shared_ptr<bool> choosingColor) : Player(positionOfFirstCard, graphics)
 {
 	this->deck = deck;
+	this->choosingColor = choosingColor;
 }
 
+bool HumanPlayer::tryChooseAColor(shared_ptr<CardFunctionColor> colorToBePlayed, vector<shared_ptr<ColorSprite>> colorOptions)
+{
+	for (auto color : colorOptions)
+	{
+		if (isSpriteClicked(color->sprite))
+		{
+			(*colorToBePlayed) = color->color;
+			return true;
+		}
+	}
+	return false;
+}
+	
 void HumanPlayer::takeCards(vector<shared_ptr<Card>>& cards)
 {
 	for (int i = 0; i < this->cards.size(); i++)
@@ -137,7 +151,7 @@ bool HumanPlayer::tryPlayACard(shared_ptr<Card>& cardToPlay, shared_ptr<Card> to
 				cardToPlay = card.card;
 				if (card.card->Number == CardFunctionNumber::top)
 				{
-					colorToBePlayed = make_shared<CardFunctionColor>(getRandomColor());
+					(*choosingColor) = true;
 				}
 				return true;
 			}

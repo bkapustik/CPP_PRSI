@@ -98,7 +98,7 @@ bool Player::tryPlayACard(shared_ptr<Card>& cardToPlay, shared_ptr<Card> topDeck
 
 	if (tryReturnCardOfNumber(CardFunctionNumber::top, cardToPlay))
 	{
-		colorToBePlayed = make_shared<CardFunctionColor>(getRandomColor());
+		(*colorToBePlayed) = getRandomColor();
 		return true;
 	}
 

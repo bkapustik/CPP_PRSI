@@ -39,7 +39,7 @@ int main()
 
 					clock->restart();
 				}
-				menu.doAction();
+				menu.tryRestart();
 			}
 		}
 

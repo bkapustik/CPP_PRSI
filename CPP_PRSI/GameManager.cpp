@@ -5,7 +5,7 @@ GameManager::GameManager()
 	
 }
 
-GameManager::GameManager(int numberOfPlayers, shared_ptr<Deck> deck, shared_ptr<GraphicsHelper> graphicsHelper)
+GameManager::GameManager(int numberOfPlayers, shared_ptr<Deck> deck, shared_ptr<GraphicsHelper> graphicsHelper, shared_ptr<bool> choosingColor, vector<shared_ptr<ColorSprite>> colorSprites)
 {
 	numberOfPlayers = 4;
 	deck->shuffle();
@@ -13,12 +13,12 @@ GameManager::GameManager(int numberOfPlayers, shared_ptr<Deck> deck, shared_ptr<
 	NumberOfPlayersSkippedByAce = 0;
 	GameDeck = deck;
 	NumberOfPlayers = numberOfPlayers;
-
+	this->colorSprites = colorSprites;
 	TopHasBeenPlayed = make_shared<bool>(false);
-
+	ColorToBePlayed = make_shared<CardFunctionColor>(CardFunctionColor::heart);
 	graphics = graphicsHelper;
 
-	RealPlayer = make_shared<HumanPlayer>(HumanPlayer(Vector2f(graphics->ScreenWidth / 2 - 300, graphics->ScreenHeight - 200), graphics, deck));
+	RealPlayer = make_shared<HumanPlayer>(HumanPlayer(Vector2f(graphics->ScreenWidth / 2 - 300, graphics->ScreenHeight - 200), graphics, deck, choosingColor));
 	Players.push_back(RealPlayer);
 	
 	vector<Vector2f> positionOfFirstCardSpriteOfPlayer{ Vector2f(200, 200), Vector2f(graphics->ScreenWidth/2, 200), Vector2f(graphics->ScreenWidth - 300, 200) };
@@ -129,11 +129,26 @@ void GameManager::playOneTurn()
 	if (playerOnTurn->wantsCustomTurn() || !userInputReceived)
 	{
 		userInputReceived = false;
+		if ((*playerOnTurn->choosingColor))
+		{
+			if (playerOnTurn->tryChooseAColor(ColorToBePlayed, colorSprites))
+			{
+				(*playerOnTurn->choosingColor) = false;
+				userInputReceived = true;
+			}
+		}
 		if (playerOnTurn->tryPlayACard(playedCard, topCard, TopHasBeenPlayed, ColorToBePlayed, CardsToTake, NumberOfPlayersSkippedByAce))
 		{
 			evaluatePlayedCard(playedCard);
+			if (playedCard->Color == CardFunctionColor::leaf && playedCard->Number == CardFunctionNumber::bot)
+			{
+				evaluateLeafBotCard();
+			}
 			playerOnTurn->removeCard(playedCard);
-			userInputReceived = true;
+			if (!(*playerOnTurn->choosingColor))
+			{
+				userInputReceived = true;
+			}
 		}
 		else if (playerOnTurn->tryTakeACard())
 		{
