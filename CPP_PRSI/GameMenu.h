@@ -5,7 +5,7 @@
 #include "Click.h"
 #include "GameManager.h"
 
-enum GameState
+enum class GameState
 {
 	initial, playing, playerWon, playerLost, paused
 };
@@ -34,11 +34,17 @@ private:
 	shared_ptr<GraphicsHelper> graphics;
 	shared_ptr<Texture> cardBackSide;
 	shared_ptr<bool> isHumanChoosingColor;
+
+	Text winText;
+	Text loseText;
+
+	Button beSkippedButton;
+	Button takeCardsButton;
 	
 public:
 	Menu(float width, float height, shared_ptr<RenderWindow> window, float secondsToWaitBetweenEachRound, shared_ptr<Clock> clock);
 	void render();
-	void tryRestart();
+	void tryReactToMenuEvent();
 	GameState gameState;
 	GameManager gameManager;
 	Sprite background;

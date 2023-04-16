@@ -78,6 +78,8 @@ unique_ptr<sf::Texture> Opener::getCardTexture(const string& path)
 Opener::Opener()
 {
 	rootPath = buildPath(vector<string>{ texturesRoot, cardRoot });
+	font = Font();
+	font.loadFromFile("./Fonts/videotype.otf");
 }
 
 void Opener::operator=(const Opener& opener)
@@ -155,7 +157,7 @@ vector<shared_ptr<ColorSprite>> Opener::getColorSprites(float screenWidth, float
 		cardColors[i]->sprite->setTextureRect(IntRect(Vector2i(0, 0), Vector2i(colorOptionWidth, colorOptionHeight)));
 
 		cardColors[i]->sprite->setPosition((screenWidth / 2) + xPositionRelativeToCenter, (screenHeight - colorOptionHeight) / 2);
-	
+
 		xPositionRelativeToCenter += colorOptionWidth + spaceBetweenColorOptions;
 	}
 
@@ -192,6 +194,7 @@ string Opener::colorToName(const CardFunctionColor& color)
 		return "bell";
 	}
 }
+
 string Opener::numberToName(const CardFunctionNumber& number)
 {
 	switch (number)
@@ -213,5 +216,17 @@ string Opener::numberToName(const CardFunctionNumber& number)
 	case CardFunctionNumber::ace:
 		return "ace";
 	}
+}
+
+Button Opener::getButton(string text, float width, float height, float positionX, float positionY)
+{
+	shared_ptr<Text> buttonText(make_shared<Text>());
+	buttonText->setFont(font);
+	buttonText->setString(text);
+	buttonText->setFillColor(Color::Black);
+	Button button = Button(move(getMenuTexture("button.png")), buttonText);
+	button.setSize(width, height);
+	button.setPosition(positionX, positionY);
+	return button;
 }
 

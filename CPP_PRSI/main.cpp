@@ -34,12 +34,12 @@ int main()
 					
 					if (menu.gameManager.PlayerHasFinished)
 					{
-						menu.gameState = playerWon;
+						menu.gameState = GameState::playerWon;
 					}
 
 					clock->restart();
 				}
-				menu.tryRestart();
+				menu.tryReactToMenuEvent();
 			}
 		}
 

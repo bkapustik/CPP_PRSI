@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="CardSprite.cpp" />
     <ClCompile Include="Click.cpp" />
@@ -155,6 +156,7 @@
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Button.h" />
     <ClInclude Include="CardFunctionColor.h" />
     <ClInclude Include="CardFunctionNumber.h" />
     <ClInclude Include="Card.h" />

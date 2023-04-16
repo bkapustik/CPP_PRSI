@@ -5,6 +5,7 @@
 #include "memory"
 #include "iostream"
 #include "ColorSprite.h"
+#include "Button.h"
 
 using namespace std;
 using namespace sf;
@@ -18,6 +19,7 @@ private:
 	const string cardBackSideRoot = "CardBackSite";
 	const string menuRoot = "Menu";
 	const string colorRoot = "Colors";
+	Font font;
 	string rootPath;
 
 	string buildPath(vector<string> pathParts);
@@ -36,8 +38,10 @@ public:
 
 	static string colorToName(const CardFunctionColor& color);
 	static string numberToName(const CardFunctionNumber& color);
-	
+
 	shared_ptr<Texture> getCardBackSide();
 	vector<shared_ptr<ColorSprite>> getColorSprites(float screenWidth, float screenHeight);
+
+	Button getButton(string text, float width, float height, float positionX, float positionY);
 };
 

@@ -16,6 +16,7 @@ public :
 	float CardWidth;
 	float ScreenHeight;
 	float ScreenWidth;
+	Font font;
 	shared_ptr<Texture> backCardSideTexture;
 
 	GraphicsHelper(
@@ -26,5 +27,7 @@ public :
 	);
 	void scaleCardSize(shared_ptr<Sprite> card);
 	void setPositionRelativeToCardSize(shared_ptr<Sprite> card, float width, float height);
+
+	Text getText(string text);
 };
 

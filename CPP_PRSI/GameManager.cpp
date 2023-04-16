@@ -36,6 +36,8 @@ GameManager::GameManager(int numberOfPlayers, shared_ptr<Deck> deck, shared_ptr<
 	{
 		giveNCardsToPlayer(player, numberOfCardsAtTheBeginning);
 	}
+
+	playerEvent = notPlaying;
 }
 
 void GameManager::giveNCardsToPlayer(shared_ptr<Player> player, int n)
@@ -112,6 +114,21 @@ void GameManager::evaluatePlayedCard(shared_ptr<Card> card)
 	GameDeck->addACard(card);
 }
 
+void GameManager::humanSkip()
+{
+	NumberOfPlayersSkippedByAce--;
+	userInputReceived = true;
+	checkUserInputRecieved();
+}
+
+void GameManager::humanTakeCards()
+{
+	giveNCardsToPlayer(Players[PlayerOnTurn], CardsToTake);
+	CardsToTake = 0;
+	userInputReceived = true;
+	checkUserInputRecieved();
+}
+
 void GameManager::playOneTurn()
 {
 	//makes the player on turn play
@@ -128,6 +145,19 @@ void GameManager::playOneTurn()
 	playerOnTurn->setOnTurn();
 	if (playerOnTurn->wantsCustomTurn() || !userInputReceived)
 	{
+		if (NumberOfPlayersSkippedByAce > 0)
+		{
+			playerEvent = beingSkipped;
+		}
+		else if (CardsToTake > 0)
+		{
+			playerEvent = hasToTakeACard;
+		}
+		else
+		{
+			playerEvent = playing;
+		}
+
 		userInputReceived = false;
 		if ((*playerOnTurn->choosingColor))
 		{
@@ -166,7 +196,7 @@ void GameManager::playOneTurn()
 	}
 	else
 	{
-
+		playerEvent = notPlaying;
 		if (CardsToTake > 0)
 		{
 			shared_ptr<Card> cancellingCard;
@@ -211,6 +241,12 @@ void GameManager::playOneTurn()
 			giveNCardsToPlayer(playerOnTurn, 1);
 		}
 	}
+	checkUserInputRecieved();
+}
+
+void GameManager::checkUserInputRecieved()
+{
+	auto playerOnTurn = Players[PlayerOnTurn];
 	if (userInputReceived)
 	{
 		if (playerOnTurn->hasFinished)
@@ -221,6 +257,7 @@ void GameManager::playOneTurn()
 		{
 			PlayerOnTurn++;
 		}
+
 		playerOnTurn->cancelIsOnTurn();
 
 		if (RealPlayer->hasFinished)
