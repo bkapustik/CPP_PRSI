@@ -220,11 +220,11 @@ string Opener::numberToName(const CardFunctionNumber& number)
 
 Button Opener::getButton(string text, float width, float height, float positionX, float positionY)
 {
-	shared_ptr<Text> buttonText(make_shared<Text>());
+	unique_ptr<Text> buttonText(make_unique<Text>());
 	buttonText->setFont(font);
 	buttonText->setString(text);
 	buttonText->setFillColor(Color::Black);
-	Button button = Button(move(getMenuTexture("button.png")), buttonText);
+	Button button = Button(move(getMenuTexture("button.png")), move(buttonText));
 	button.setSize(width, height);
 	button.setPosition(positionX, positionY);
 	return button;

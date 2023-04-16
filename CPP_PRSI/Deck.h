@@ -12,25 +12,31 @@ using namespace std;
 class Deck
 {
 public:
-	Deck(vector<shared_ptr<Card>>& cards, std::shared_ptr<GraphicsHelper> graphics);
-	void shuffle();
-	void print();
-	vector<shared_ptr<Card>> getNCards(int n);
-	void addACard(shared_ptr<Card> card);
-	shared_ptr<Card> showTopCard() const;
+
 	vector<shared_ptr<Sprite>> sprites;
 	shared_ptr<Sprite> frontDeckCard;
 
+	Deck(vector<shared_ptr<Card>>& cards, std::shared_ptr<GraphicsHelper> graphics);
+	
+	void shuffle();
+	void print();
+	void addACard(shared_ptr<Card> card);
+
+	vector<shared_ptr<Card>> getNCards(int n);
+	shared_ptr<Card> showTopCard() const;
+
 private: 
-	shared_ptr<GraphicsHelper> graphics;
-	std::queue<shared_ptr<Card>> Cards;
-	void shuffle(vector<shared_ptr<Card>>& cards);
-	vector<shared_ptr<Card>> cardsToVector();
-	void vectorToQueue(vector<shared_ptr<Card>>& cards);
-	shared_ptr<Card> deque();
 	Vector2f PositionOfFirstCard;
+	queue<shared_ptr<Card>> Cards;
+
+	shared_ptr<GraphicsHelper> graphics;
 	
 	void changeShownCard();
+	void vectorToQueue(vector<shared_ptr<Card>>& cards);
+	void shuffle(vector<shared_ptr<Card>>& cards);
 
+	vector<shared_ptr<Card>> cardsToVector();
+
+	shared_ptr<Card> deque();
 	shared_ptr<Sprite> createBackSprite(int shift);
 };

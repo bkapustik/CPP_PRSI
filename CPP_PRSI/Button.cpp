@@ -1,10 +1,10 @@
 #include "Button.h"
 
-Button::Button(unique_ptr<Texture> texture, shared_ptr<Text> text)
+Button::Button(unique_ptr<Texture> texture, unique_ptr<Text> text)
 {
 	this->texture = move(texture);
-	this->text = text;
-	this->sprite = make_shared<Sprite>(Sprite((*this->texture)));
+	this->text = move(text);
+	this->sprite = make_unique<Sprite>(Sprite((*this->texture)));
 }
 
 void Button::setPosition(float width, float height)

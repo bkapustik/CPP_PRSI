@@ -11,6 +11,7 @@ class ColorSprite
 {
 public:
 	CardFunctionColor color;
+
 	shared_ptr<Sprite> sprite;
 	unique_ptr<Texture> texture;
 
