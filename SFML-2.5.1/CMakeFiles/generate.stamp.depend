@@ -1,0 +1,11 @@
+# CMake generation dependency list for this directory.
+C:/Program Files/CMake/share/cmake-3.25/Modules/BasicConfigVersion-SameMajorVersion.cmake.in
+C:/Program Files/CMake/share/cmake-3.25/Modules/CMakePackageConfigHelpers.cmake
+C:/Program Files/CMake/share/cmake-3.25/Modules/CheckIncludeFile.cmake
+C:/Program Files/CMake/share/cmake-3.25/Modules/CheckIncludeFileCXX.cmake
+C:/Program Files/CMake/share/cmake-3.25/Modules/CheckTypeSize.cmake
+C:/Program Files/CMake/share/cmake-3.25/Modules/WriteBasicConfigVersionFile.cmake
+C:/Users/asus/Desktop/tryingCppLinking/SFML-2.5.1/CMakeLists.txt
+C:/Users/asus/Desktop/tryingCppLinking/SFML-2.5.1/cmake/Config.cmake
+C:/Users/asus/Desktop/tryingCppLinking/SFML-2.5.1/cmake/SFMLConfig.cmake.in
+C:/Users/asus/Desktop/tryingCppLinking/SFML-2.5.1/cmake/SFMLConfigDependencies.cmake.in
