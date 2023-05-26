@@ -63,21 +63,11 @@ else()
     endif()
 endif()
 
-# add an option for building the examples
-if(NOT SFML_OS_ANDROID)
-    sfml_set_option(SFML_BUILD_EXAMPLES FALSE BOOL "TRUE to build the SFML examples, FALSE to ignore them")
-else()
-    set(SFML_BUILD_EXAMPLES FALSE)
-endif()
-
 # add options to select which modules to build
 sfml_set_option(SFML_BUILD_WINDOW TRUE BOOL "TRUE to build SFML's Window module. This setting is ignored, if the graphics module is built.")
 sfml_set_option(SFML_BUILD_GRAPHICS TRUE BOOL "TRUE to build SFML's Graphics module.")
 sfml_set_option(SFML_BUILD_AUDIO TRUE BOOL "TRUE to build SFML's Audio module.")
 sfml_set_option(SFML_BUILD_NETWORK TRUE BOOL "TRUE to build SFML's Network module.")
-
-# add an option for building the API documentation
-sfml_set_option(SFML_BUILD_DOC FALSE BOOL "TRUE to generate the API documentation, FALSE to ignore it")
 
 # add an option for choosing the OpenGL implementation
 if(SFML_BUILD_WINDOW)
@@ -147,7 +137,6 @@ elseif(SFML_OS_MACOSX)
 elseif(SFML_OS_ANDROID)
     set(DEFAULT_INSTALL_MISC_DIR ${CMAKE_ANDROID_NDK}/sources/third_party/sfml)
 endif()
-# add an option to let the user specify a custom directory for doc, examples, licence, readme and other miscellaneous files
 sfml_set_option(SFML_MISC_INSTALL_PREFIX "${DEFAULT_INSTALL_MISC_DIR}" PATH "Prefix installation path for miscellaneous files")
 
 
@@ -267,12 +256,6 @@ set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "CMake")
 
 # add the subdirectories
 add_subdirectory(src/SFML)
-if(SFML_BUILD_EXAMPLES)
-    add_subdirectory(examples)
-endif()
-if(SFML_BUILD_DOC)
-    add_subdirectory(doc)
-endif()
 
 # on Linux and BSD-like OS, install pkg-config files by default
 set(SFML_INSTALL_PKGCONFIG_DEFAULT FALSE)
@@ -397,9 +380,6 @@ else()
             FRAMEWORK DESTINATION "."
             COMPONENT devel)
 endif()
-
-install(FILES license.md DESTINATION ${SFML_MISC_INSTALL_PREFIX})
-install(FILES readme.md DESTINATION ${SFML_MISC_INSTALL_PREFIX})
 
 # install 3rd-party libraries and tools
 if(SFML_OS_WINDOWS)
