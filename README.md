@@ -24,9 +24,9 @@ Or you can use VSCode cmake extension, or Visual Studio cmake support.
 On linux, first you need to download some libraries.
 
 The following command should be enough for this
-
+```
 sudo apt-get install libpthread-stubs0-dev libgl1-mesa-dev libx11-dev libxrandr-dev libfreetype6-dev libglew-dev libjpeg8-dev libsndfile1-dev libopenal-dev libxcursor-dev libudev-dev libflac-dev libvorbis-dev
-
+```
 Then you head to the root folder. And use the following commands : 
 ```
 mkdir build
