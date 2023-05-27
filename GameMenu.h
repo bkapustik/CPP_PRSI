@@ -47,7 +47,7 @@ public:
 	Sprite background;
 	shared_ptr<RenderWindow> window;
 
-	Menu(float width, float height, shared_ptr<RenderWindow> window, float secondsToWaitBetweenEachRound, shared_ptr<Clock> clock);
+	Menu(float screenWidth, float screenHeight, const shared_ptr<RenderWindow> window, float secondsToWaitBetweenEachRound,const shared_ptr<Clock> clock);
 	
 	void render();
 	void tryReactToMenuEvent();

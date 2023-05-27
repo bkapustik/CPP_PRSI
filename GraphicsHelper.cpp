@@ -1,10 +1,12 @@
 #include "GraphicsHelper.h"
 
 GraphicsHelper::GraphicsHelper(
-	float cardDecreaseWidthBy, float cardDecreaseHeightBy,
-	float screenWidth, float screenHeight,
+	float cardDecreaseWidthBy, 
+	float cardDecreaseHeightBy,
+	float screenWidth,
+	float screenHeight,
 	const Card & firstCard,
-	shared_ptr<Texture> backCardSideTexture
+	const shared_ptr<Texture> backCardSideTexture
 )
 {
 	CardDecreaseWidthBy = cardDecreaseWidthBy;
@@ -38,7 +40,7 @@ void GraphicsHelper::setPositionRelativeToCardSize(Sprite& card, float width, fl
 	card.setPosition(width - CardWidth / 2, height - CardHeight / 2);
 }
 
-Text GraphicsHelper::getText(string toDisplay)
+Text GraphicsHelper::getText(const string & toDisplay)
 {
 	Text text;
 	text.setFont(font);

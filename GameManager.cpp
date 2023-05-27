@@ -5,7 +5,7 @@ GameManager::GameManager()
 	
 }
 
-GameManager::GameManager(int numberOfPlayers, shared_ptr<Deck> deck, shared_ptr<GraphicsHelper> graphicsHelper, shared_ptr<bool> choosingColor, vector<shared_ptr<ColorSprite>> colorSprites)
+GameManager::GameManager(int numberOfPlayers, shared_ptr<Deck> deck, const shared_ptr<GraphicsHelper> graphicsHelper, shared_ptr<bool> choosingColor, const vector<shared_ptr<ColorSprite>> colorSprites)
 {
 	numberOfPlayers = 4;
 	deck->shuffle();
@@ -57,7 +57,7 @@ void GameManager::evaluateLeafBotCard()
 	CardsToTake = 0;
 }
 
-void GameManager::evaluateCardTakingCancellingCard(unique_ptr<Card>& card)
+void GameManager::evaluateCardTakingCancellingCard(const unique_ptr<Card>& card)
 {
 	if (card->Number == CardFunctionNumber::seven)
 	{
@@ -74,7 +74,7 @@ void GameManager::evaluateSkippingCard()
 	NumberOfPlayersSkippedByAce++;
 }
 
-void GameManager::removeFinishedPlayer(shared_ptr<Player> player)
+void GameManager::removeFinishedPlayer()
 {
 	vector<shared_ptr<Player>> newPlayersInGame = vector<shared_ptr<Player>>();
 	for (int i = 0; i < PlayerOnTurn; i++)
@@ -95,7 +95,7 @@ void GameManager::evaluateTopCard()
 	(*TopHasBeenPlayed) = true;
 }
 
-void GameManager::evaluatePlayedCard(unique_ptr<Card>& card)
+void GameManager::evaluatePlayedCard(const unique_ptr<Card>& card)
 {
 	if (card->Number == CardFunctionNumber::seven)
 	{
@@ -201,7 +201,7 @@ void GameManager::playOneTurn()
 		{
 			unique_ptr<Card> cancellingCard = make_unique<Card>();
 
-			if (playerOnTurn->tryCanCancelTakingACard(cancellingCard, topCard))
+			if (playerOnTurn->tryCanCancelTakingACard(cancellingCard))
 			{
 				evaluateCardTakingCancellingCard(cancellingCard);
 				GameDeck->addACard(move(cancellingCard));
@@ -217,7 +217,7 @@ void GameManager::playOneTurn()
 		{
 			unique_ptr<Card> cancellingCard = make_unique<Card>();
 
-			if (playerOnTurn->tryCanCancelBeingSkipped(cancellingCard, topCard))
+			if (playerOnTurn->tryCanCancelBeingSkipped(cancellingCard))
 			{
 				evaluateSkippingCard();
 				GameDeck->addACard(move(cancellingCard));
@@ -251,7 +251,7 @@ void GameManager::checkUserInputRecieved()
 	{
 		if (playerOnTurn->hasFinished)
 		{
-			removeFinishedPlayer(playerOnTurn);
+			removeFinishedPlayer();
 		}
 		else
 		{

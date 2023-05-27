@@ -22,26 +22,26 @@ private:
 	Font font;
 	string rootPath;
 
-	string buildPath(vector<string> pathParts);
-	string buildCardPath(const string color, const string number);
-	CardFunctionNumber nameToNumber(const string& name);
-	CardFunctionColor nameToColor(const string& color);
-	unique_ptr<sf::Texture> getCardTexture(const string& path);
+	string buildPath(const vector<string> & pathParts) const;
+	string buildCardPath(const string & color, const string & number) const;
+	CardFunctionNumber nameToNumber(const string& name) const;
+	CardFunctionColor nameToColor(const string& color) const;
+	unique_ptr<sf::Texture> getCardTexture(const string& path) const;
 
 public:
 	Opener();
 	void operator=(const Opener& opener);
-	unique_ptr<Texture> getMenuTexture(string startImage);
-	string getBackgroundPath();
-	vector<unique_ptr<Card>> getCards();
-	sf::Texture getBackgroundTexture();
+	unique_ptr<Texture> getMenuTexture(string startImage) const;
+	string getBackgroundPath() const;
+	vector<unique_ptr<Card>> getCards() const;
+	sf::Texture getBackgroundTexture() const;
 
 	static string colorToName(const CardFunctionColor& color);
 	static string numberToName(const CardFunctionNumber& color);
 
-	shared_ptr<Texture> getCardBackSide();
-	vector<shared_ptr<ColorSprite>> getColorSprites(float screenWidth, float screenHeight);
+	shared_ptr<Texture> getCardBackSide() const;
+	vector<shared_ptr<ColorSprite>> getColorSprites(float screenWidth, float screenHeight) const;
 
-	Button getButton(string text, float width, float height, float positionX, float positionY);
+	Button getButton(const string & text, float width, float height, float positionX, float positionY) const;
 };
 

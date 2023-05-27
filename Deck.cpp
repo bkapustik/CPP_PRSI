@@ -4,7 +4,7 @@
 
 using namespace std;
 
-Sprite Deck::createBackSprite(int shift)
+Sprite Deck::createBackSprite(const int shift)
 {
 	auto newSprite = Sprite((*graphics->backCardSideTexture));
 
@@ -20,7 +20,7 @@ void Deck::changeShownCard()
 	graphics->setPositionRelativeToCardSize((*frontDeckCard->sprite), graphics->ScreenWidth / 2, graphics->ScreenHeight / 2);
 }
 
-Deck::Deck(vector<unique_ptr<Card>>& cards, std::shared_ptr<GraphicsHelper> graphics)
+Deck::Deck(vector<unique_ptr<Card>>& cards, const shared_ptr<GraphicsHelper> graphics)
 {
 	this->PositionOfFirstCard = Vector2f(graphics->ScreenWidth / 2 + 200, graphics->ScreenHeight / 2);
 	this->graphics = graphics;
@@ -79,24 +79,11 @@ void Deck::vectorToQueue(vector<unique_ptr<Card>>& cards)
 	}
 }
 
-void Deck::print()
-{
-	auto newQueue = queue<unique_ptr<Card>>();
-
-	while (Cards.size() > 0)
-	{
-		newQueue.push(move(Cards.front()));
-		Cards.pop();
-	}
-
-	Cards = move(newQueue);
-}
-
 vector<unique_ptr<Card>> Deck::getNCards(int n)
 {
 	vector<unique_ptr<Card>> cards = vector<unique_ptr<Card>>();
 
-	//can not start with card at start of deck
+	//can not start with card at the start of the deck
 	for (int i = 0; i < n; i++)
 	{
 		if (Cards.size() > 1)

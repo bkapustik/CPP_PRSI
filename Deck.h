@@ -18,10 +18,9 @@ public:
 	vector<unique_ptr<Sprite>> sprites;
 	unique_ptr<CardSprite> frontDeckCard;
 
-	Deck(vector<unique_ptr<Card>>& cards, std::shared_ptr<GraphicsHelper> graphics);
+	Deck(vector<unique_ptr<Card>>& cards, const std::shared_ptr<GraphicsHelper> graphics);
 	
 	void shuffle();
-	void print();
 	void addACard(unique_ptr<Card> card);
 
 	vector<unique_ptr<Card>> getNCards(int n);
@@ -39,5 +38,5 @@ private:
 	vector<unique_ptr<Card>> cardsToVector();
 
 	unique_ptr<Card> deque();
-	Sprite createBackSprite(int shift);
+	Sprite createBackSprite(const int shift);
 };

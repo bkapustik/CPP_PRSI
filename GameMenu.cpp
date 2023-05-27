@@ -4,7 +4,7 @@
 
 using namespace std;
 
-Menu::Menu(float screenWidth, float screenHeight, shared_ptr<RenderWindow> window, float secondsToWaitBetweenEachRound, shared_ptr<Clock> clock)
+Menu::Menu(float screenWidth, float screenHeight, const shared_ptr<RenderWindow> window, float secondsToWaitBetweenEachRound,const shared_ptr<Clock> clock)
 {
 	this->clock = clock;
 	this->screenWidth = screenWidth;

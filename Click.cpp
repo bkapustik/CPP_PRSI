@@ -1,6 +1,6 @@
 #include "Click.h"
 
-bool Click::isClicked(shared_ptr<Sprite> sprite)
+bool Click::isClicked(const shared_ptr<Sprite> sprite)
 {
 	if (Mouse::getPosition().x > sprite->getPosition().x
 		&& Mouse::getPosition().x < sprite->getPosition().x + sprite->getTexture()->getSize().x
@@ -16,7 +16,7 @@ bool Click::isClicked(shared_ptr<Sprite> sprite)
 	}
 }
 
-bool Click::isClicked(Sprite& sprite)
+bool Click::isClicked(const Sprite& sprite)
 {
 	if (Mouse::getPosition().x > sprite.getPosition().x
 		&& Mouse::getPosition().x < sprite.getPosition().x + sprite.getTexture()->getSize().x

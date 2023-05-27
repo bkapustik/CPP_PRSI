@@ -7,7 +7,7 @@ Button::Button(unique_ptr<Texture> texture, unique_ptr<Text> text)
 	this->sprite = make_unique<Sprite>(Sprite((*this->texture)));
 }
 
-void Button::setPosition(float width, float height)
+void Button::setPosition(const float width, const float height)
 {
 	float spriteWidth = sprite->getGlobalBounds().width;
 	float spriteHeight = sprite->getGlobalBounds().height;
@@ -22,7 +22,7 @@ void Button::setPosition(float width, float height)
 	this->text->setPosition(spritePosX + spriteWidth/2 - textWidth/2, spritePosY + spriteHeight/2 - textHeight/2);
 }
 
-void Button::setSize(float width, float height)
+void Button::setSize(const float width, const float height)
 {
 	auto currWidth = sprite->getGlobalBounds().width;
 	auto currHeight = sprite->getGlobalBounds().height;

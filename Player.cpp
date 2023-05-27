@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(Vector2f positionOfFirstCard, shared_ptr<GraphicsHelper> graphics)
+Player::Player(const Vector2f positionOfFirstCard, const shared_ptr<GraphicsHelper> graphics)
 {
 	isOnTurn = false;
 	hasFinished = false;
@@ -34,7 +34,7 @@ void Player::cancelIsOnTurn()
 	isOnTurn = false;
 }
 
-bool Player::tryCanCancelTakingACard(unique_ptr<Card>& cancellingCard, ColorNumber& topDeckCard)
+bool Player::tryCanCancelTakingACard(unique_ptr<Card>& cancellingCard)
 {
 	if (tryReturnCardOfNumber(CardFunctionNumber::seven, cancellingCard))
 	{
@@ -47,7 +47,7 @@ bool Player::tryCanCancelTakingACard(unique_ptr<Card>& cancellingCard, ColorNumb
 	return false;
 }
 
-bool Player::tryCanCancelBeingSkipped(unique_ptr<Card>& cancellingCard, ColorNumber& topDeckCard)
+bool Player::tryCanCancelBeingSkipped(unique_ptr<Card>& cancellingCard)
 {
 	if (tryReturnCardOfNumber(CardFunctionNumber::ace, cancellingCard))
 	{
@@ -56,7 +56,7 @@ bool Player::tryCanCancelBeingSkipped(unique_ptr<Card>& cancellingCard, ColorNum
 	return false;
 }
 
-CardFunctionColor Player::getRandomColor()
+CardFunctionColor Player::getRandomColor() const
 {
 	const int numberOfColors = 4;
 	CardFunctionColor colors[numberOfColors] = { CardFunctionColor::leaf, CardFunctionColor::bell, CardFunctionColor::heart, CardFunctionColor::acorn };
@@ -64,7 +64,7 @@ CardFunctionColor Player::getRandomColor()
 	return (colors[randomNumber]);
 }
 
-bool Player::tryPlayACard(unique_ptr<Card>& cardToPlay, ColorNumber& topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed)
+bool Player::tryPlayACard(unique_ptr<Card>& cardToPlay, const ColorNumber& topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed)
 {
 	CardFunctionColor colorToPlay = topDeckCard.Color;
 
@@ -105,7 +105,7 @@ bool Player::tryPlayACard(unique_ptr<Card>& cardToPlay, ColorNumber& topDeckCard
 	return false;
 }
 
-bool Player::tryReturnCardOfColor(CardFunctionColor color, unique_ptr<Card>& cardToReturn)
+bool Player::tryReturnCardOfColor(const CardFunctionColor color, unique_ptr<Card>& cardToReturn)
 {
 	for (int i = 0; i < cards.size(); ++i)
 	{
@@ -119,7 +119,7 @@ bool Player::tryReturnCardOfColor(CardFunctionColor color, unique_ptr<Card>& car
 	return false;
 }
 
-bool Player::tryReturnCardOfNumber(CardFunctionNumber number, unique_ptr<Card>& cardToReturn)
+bool Player::tryReturnCardOfNumber(const CardFunctionNumber number, unique_ptr<Card>& cardToReturn)
 {
 	for (int i = 0; i < cards.size(); ++i)
 	{
@@ -133,7 +133,7 @@ bool Player::tryReturnCardOfNumber(CardFunctionNumber number, unique_ptr<Card>& 
 	return false;
 }
 
-bool Player::tryReturnCardOfColorAndNumber(CardFunctionColor color, CardFunctionNumber number, unique_ptr<Card>& cardToReturn)
+bool Player::tryReturnCardOfColorAndNumber(const CardFunctionColor& color,const CardFunctionNumber& number, unique_ptr<Card>& cardToReturn)
 {
 	for (int i = 0; i < cards.size(); ++i)
 	{

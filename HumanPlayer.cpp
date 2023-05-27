@@ -1,13 +1,13 @@
 #include "HumanPlayer.h"
 #include <iostream>
 
-HumanPlayer::HumanPlayer(Vector2f positionOfFirstCard, shared_ptr<GraphicsHelper> graphics, shared_ptr<Deck> deck, shared_ptr<bool> choosingColor) : Player(positionOfFirstCard, graphics)
+HumanPlayer::HumanPlayer(const Vector2f positionOfFirstCard, const shared_ptr<GraphicsHelper> graphics, const shared_ptr<Deck> deck, const shared_ptr<bool> choosingColor) : Player(positionOfFirstCard, graphics)
 {
 	this->deck = deck;
 	this->choosingColor = choosingColor;
 }
 
-bool HumanPlayer::tryChooseAColor(shared_ptr<CardFunctionColor> colorToBePlayed, vector<shared_ptr<ColorSprite>> colorOptions)
+bool HumanPlayer::tryChooseAColor(shared_ptr<CardFunctionColor> colorToBePlayed, const vector<shared_ptr<ColorSprite>> & colorOptions)
 {
 	for (auto color : colorOptions)
 	{
@@ -47,7 +47,7 @@ void HumanPlayer::checkPlayersCards()
 	}
 }
 
-bool HumanPlayer::isSpriteClicked(unique_ptr<Sprite>& sprite)
+bool HumanPlayer::isSpriteClicked(const unique_ptr<Sprite>& sprite) const
 {
 	if (Mouse::getPosition().x > sprite->getPosition().x
 		&& Mouse::getPosition().x < sprite->getPosition().x + sprite->getGlobalBounds().width
@@ -63,7 +63,7 @@ bool HumanPlayer::isSpriteClicked(unique_ptr<Sprite>& sprite)
 	}
 }
 
-bool HumanPlayer::isSpriteClicked(Sprite& sprite)
+bool HumanPlayer::isSpriteClicked(const Sprite& sprite) const
 {
 	if (Mouse::getPosition().x > sprite.getPosition().x
 		&& Mouse::getPosition().x < sprite.getPosition().x + sprite.getGlobalBounds().width
@@ -79,12 +79,12 @@ bool HumanPlayer::isSpriteClicked(Sprite& sprite)
 	}
 }
 
-bool HumanPlayer::wantsCustomTurn()
+bool HumanPlayer::wantsCustomTurn() const
 {
 	return true;
 }
 
-bool HumanPlayer::canUseThisCard(CardSprite& card, ColorNumber& topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait)
+bool HumanPlayer::canUseThisCard(CardSprite& card, const ColorNumber& topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait)
 {
 	if ((*topHasBeenPlayed))
 	{
@@ -144,7 +144,7 @@ bool HumanPlayer::tryTakeACard()
 	return false;
 }
 
-bool HumanPlayer::tryPlayACard(unique_ptr<Card>& cardToPlay, ColorNumber& topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait)
+bool HumanPlayer::tryPlayACard(unique_ptr<Card>& cardToPlay, const ColorNumber& topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait)
 {
 	for (int i = 0; i < cards.size(); ++i)
 	{

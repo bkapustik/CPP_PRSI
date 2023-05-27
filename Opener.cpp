@@ -1,6 +1,6 @@
 #include "Opener.h"
 
-string Opener::buildPath(vector<string> pathParts)
+string Opener::buildPath(const vector<string> & pathParts) const
 {
 	string path = "..";
 	for (auto i = 0; i < pathParts.size(); ++i)
@@ -10,12 +10,12 @@ string Opener::buildPath(vector<string> pathParts)
 	return path;
 }
 
-string Opener::buildCardPath(const string color, const string number)
+string Opener::buildCardPath(const string & color, const string & number) const
 {
 	return rootPath + '/' + color + '/' + number + ".jpg";
 }
 
-CardFunctionNumber Opener::nameToNumber(const string& name)
+CardFunctionNumber Opener::nameToNumber(const string& name) const
 {
 	if (name == "seven")
 	{
@@ -49,7 +49,7 @@ CardFunctionNumber Opener::nameToNumber(const string& name)
 		return CardFunctionNumber::ace;
 }
 
-CardFunctionColor Opener::nameToColor(const string& color)
+CardFunctionColor Opener::nameToColor(const string& color) const
 {
 	if (color == "Acorns")
 	{
@@ -67,7 +67,7 @@ CardFunctionColor Opener::nameToColor(const string& color)
 		return CardFunctionColor::heart;
 }
 
-unique_ptr<sf::Texture> Opener::getCardTexture(const string& path)
+unique_ptr<sf::Texture> Opener::getCardTexture(const string& path) const
 {
 	auto texture = make_unique<sf::Texture>(Texture());
 	texture->loadFromFile(path);
@@ -86,14 +86,14 @@ void Opener::operator=(const Opener& opener)
 	*this = opener;
 }
 
-string Opener::getBackgroundPath()
+string Opener::getBackgroundPath() const
 {
 	const string backgroundImage = "2796727.jpg";
 	auto pathParts = vector<string>{ texturesRoot, backgroundRoot, backgroundImage };
 	return buildPath(pathParts);
 }
 
-vector<unique_ptr<Card>> Opener::getCards()
+vector<unique_ptr<Card>> Opener::getCards() const
 {
 	vector<string> cardNames = vector<string>({ "seven","eight","nine","ten","bot","top","king","ace" });
 	vector<string> cardColors = vector<string>({ "Acorns","Balls","Green","Heart" });
@@ -118,7 +118,7 @@ vector<unique_ptr<Card>> Opener::getCards()
 	return cards;
 }
 
-shared_ptr<Texture> Opener::getCardBackSide()
+shared_ptr<Texture> Opener::getCardBackSide() const
 {
 	const string backSideImage = "back.jpg";
 	auto pathParts = vector<string>{ texturesRoot, cardBackSideRoot, backSideImage };
@@ -128,7 +128,7 @@ shared_ptr<Texture> Opener::getCardBackSide()
 	return texture;
 }
 
-vector<shared_ptr<ColorSprite>> Opener::getColorSprites(float screenWidth, float screenHeight)
+vector<shared_ptr<ColorSprite>> Opener::getColorSprites(float screenWidth, float screenHeight) const
 {
 	vector<string> colors = vector<string>({ "Acorns","Balls","Green","Heart" });
 	vector<shared_ptr<ColorSprite>> cardColors = vector<shared_ptr<ColorSprite>>();
@@ -163,7 +163,7 @@ vector<shared_ptr<ColorSprite>> Opener::getColorSprites(float screenWidth, float
 	return cardColors;
 }
 
-unique_ptr<Texture> Opener::getMenuTexture(string startImage)
+unique_ptr<Texture> Opener::getMenuTexture(string startImage) const
 {
 	auto pathParts = vector<string>{ texturesRoot, menuRoot, startImage };
 	unique_ptr<Texture> texture = make_unique<Texture>(Texture());
@@ -172,7 +172,7 @@ unique_ptr<Texture> Opener::getMenuTexture(string startImage)
 	return texture;
 }
 
-sf::Texture Opener::getBackgroundTexture()
+sf::Texture Opener::getBackgroundTexture() const
 {
 	sf::Texture backgroundTexture;
 	backgroundTexture.loadFromFile(getBackgroundPath());
@@ -217,7 +217,7 @@ string Opener::numberToName(const CardFunctionNumber& number)
 	}
 }
 
-Button Opener::getButton(string text, float width, float height, float positionX, float positionY)
+Button Opener::getButton(const string & text, float width, float height, float positionX, float positionY) const
 {
 	unique_ptr<Text> buttonText(make_unique<Text>());
 	buttonText->setFont(font);

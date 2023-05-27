@@ -19,6 +19,6 @@ public:
 	Button() {}
 
 	void setPosition(float width, float height);
-	void setSize(float width, float height);
+	void setSize(const float width, const float height);
 };
 

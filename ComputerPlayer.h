@@ -4,12 +4,12 @@
 class ComputerPlayer : public Player
 {
 	public:
-		ComputerPlayer(Vector2f positionOfFirstCard, shared_ptr<GraphicsHelper> graphics);
+		ComputerPlayer(const Vector2f positionOfFirstCard, const shared_ptr<GraphicsHelper> graphics);
 
-		bool tryPlayACard(unique_ptr<Card>& cardToPlay, ColorNumber& topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait) override
+		bool tryPlayACard(unique_ptr<Card>& cardToPlay, const ColorNumber& topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait) override
 		{
 			return false;
 		}
-		bool wantsCustomTurn() override;
+		bool wantsCustomTurn() const override;
 };
 

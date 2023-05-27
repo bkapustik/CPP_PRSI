@@ -9,7 +9,7 @@ using namespace std;
 class Click
 {
 public:
-	static bool isClicked(shared_ptr<Sprite> sprite);
-	static bool isClicked(Sprite& sprite);
+	static bool isClicked(const shared_ptr<Sprite> sprite);
+	static bool isClicked(const Sprite& sprite);
 };
 

@@ -19,11 +19,14 @@ public :
 	Font font;
 	shared_ptr<Texture> backCardSideTexture;
 
-	GraphicsHelper(
-		float cardDecreaseWidthBy, float cardDecreaseHeightBy,
-		float screenWidth, float screenHeight,
-		const Card& firstCard,
-		shared_ptr<Texture> backCardSideTexture
+	GraphicsHelper
+	(
+		float cardDecreaseWidthBy, 
+		float cardDecreaseHeightBy,
+		float screenWidth,
+		float screenHeight,
+		const Card & firstCard,
+		const shared_ptr<Texture> backCardSideTexture
 	);
 
 	void scaleCardSize(unique_ptr<Sprite>& card);
@@ -31,6 +34,6 @@ public :
 	void setPositionRelativeToCardSize(unique_ptr<Sprite>& card, float width, float height);
 	void setPositionRelativeToCardSize(Sprite& card, float width, float height);
 
-	Text getText(string text);
+	Text getText(const string & toDisplay);
 };
 

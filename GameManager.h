@@ -26,18 +26,18 @@ private:
 	shared_ptr<Deck> GameDeck;
 	shared_ptr<HumanPlayer> RealPlayer;
 
-	void evaluateCardTakingCancellingCard(unique_ptr<Card>& card);
+	void evaluateCardTakingCancellingCard(const unique_ptr<Card>& card);
 	void evaluateSkippingCard();
 	void evaluateCardWithNumberSeven();
 	void evaluateTopCard();
 	void evaluateLeafBotCard();
 	void giveNCardsToPlayer(shared_ptr<Player> player, int n);
-	void removeFinishedPlayer(shared_ptr<Player> player);
+	void removeFinishedPlayer();
 	void checkUserInputRecieved();
-	void evaluatePlayedCard(unique_ptr<Card>& card);
+	void evaluatePlayedCard(const unique_ptr<Card>& card);
 public:
 	GameManager();
-	GameManager(int numberOfPlayers, shared_ptr<Deck> deck, shared_ptr<GraphicsHelper> graphicsHelper, shared_ptr<bool> choosingColor, vector<shared_ptr<ColorSprite>> colorSprites);
+	GameManager(int numberOfPlayers, shared_ptr<Deck> deck, const shared_ptr<GraphicsHelper> graphicsHelper, shared_ptr<bool> choosingColor, const vector<shared_ptr<ColorSprite>> colorSprites);
 	
 	bool PlayerHasFinished = false;
 	bool userInputReceived = true;
