@@ -35,7 +35,7 @@ private:
 	void evaluatePlayedCard(const unique_ptr<Card>& card);
 public:
 	GameManager();
-	GameManager(int numberOfPlayers, Deck & deck, GraphicsHelper & graphics, shared_ptr<bool> choosingColor, const vector<shared_ptr<ColorSprite>> colorSprites);
+	GameManager(int numberOfPlayers, Deck & deck, GraphicsHelper & graphics, const vector<shared_ptr<ColorSprite>> colorSprites);
 	
 	bool PlayerHasFinished = false;
 	bool userInputReceived = true;
@@ -45,7 +45,7 @@ public:
 	vector<shared_ptr<ColorSprite>> colorSprites;
 	vector<shared_ptr<Player>> Players;
 	
-	void playOneTurn(GraphicsHelper & graphics, Deck & deck);
+	void playOneTurn(GraphicsHelper & graphics, Deck & deck, bool & choosingColor);
 	void humanSkip();
 	void humanTakeCards(GraphicsHelper & graphics, Deck & deck);
 };

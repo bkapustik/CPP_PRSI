@@ -18,7 +18,6 @@ private:
 
 public:
 	bool hasFinished;
-	shared_ptr<bool> choosingColor;
 	CardFunctionColor getRandomColor() const;
 	
 	bool virtual tryChooseAColor(shared_ptr<CardFunctionColor> colorToBePlayed, const vector<shared_ptr<ColorSprite>> & colorOptions)
@@ -26,7 +25,7 @@ public:
 		return false;
 	}
 
-	bool virtual tryPlayACard(unique_ptr<Card>& cardToPlay, const ColorNumber& topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait)
+	bool virtual tryPlayACard(unique_ptr<Card>& cardToPlay, const ColorNumber& topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait, bool & choosingColor)
 	{
 		return false;
 	}

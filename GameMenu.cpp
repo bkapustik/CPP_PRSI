@@ -17,10 +17,10 @@ Menu::Menu(float screenWidth, float screenHeight, const shared_ptr<RenderWindow>
 	graphics = GraphicsHelper(2, 2, screenWidth, screenHeight, (*cards[0]), opener.getCardBackSide());
 
 	deck = Deck(cards, graphics);
-	isHumanChoosingColor = make_shared<bool>(false);
+	isHumanChoosingColor = false;
 	colorSprites = opener.getColorSprites(screenWidth, screenHeight);
 
-	this->gameManager = GameManager(4, deck, graphics, isHumanChoosingColor, colorSprites);
+	this->gameManager = GameManager(4, deck, graphics, colorSprites);
 
 	backgroundTexture = opener.getBackgroundTexture();
 	background = Sprite(backgroundTexture);
@@ -47,14 +47,14 @@ Menu::Menu(float screenWidth, float screenHeight, const shared_ptr<RenderWindow>
 
 void Menu::playOneTurn()
 {
-	gameManager.playOneTurn(graphics, deck);
+	gameManager.playOneTurn(graphics, deck, isHumanChoosingColor);
 }
 
 void Menu::displayGame()
 {
 	if (clock->getElapsedTime() > seconds(secondsToWaitBetweenEachRound) && gameManager.userInputReceived)
 	{
-		gameManager.playOneTurn(graphics, deck);
+		gameManager.playOneTurn(graphics, deck, isHumanChoosingColor);
 		if (gameManager.Players.size() <= 1)
 		{
 			gameState = GameState::playerLost;
@@ -106,7 +106,7 @@ void Menu::tryReactToMenuEvent()
 		{
 			cards = opener.getCards();
 			deck = Deck(cards, graphics);
-			this->gameManager = GameManager(4, deck, graphics, isHumanChoosingColor, colorSprites);
+			this->gameManager = GameManager(4, deck, graphics, colorSprites);
 			gameState = GameState::playing;
 			menuButton = Sprite(*this->restartTexture);
 			menuButton.setPosition((screenWidth - this->startTexture->getSize().x) / 2, (screenHeight - this->startTexture->getSize().y) / 2);
@@ -132,7 +132,7 @@ void Menu::tryReactToMenuEvent()
 
 void Menu::render()
 {
-	if ((*this->isHumanChoosingColor))
+	if (isHumanChoosingColor)
 	{
 		displayColorOptions();
 	}

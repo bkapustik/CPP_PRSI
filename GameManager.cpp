@@ -5,7 +5,7 @@ GameManager::GameManager()
 	
 }
 
-GameManager::GameManager(int numberOfPlayers, Deck & deck, GraphicsHelper & graphics, shared_ptr<bool> choosingColor, const vector<shared_ptr<ColorSprite>> colorSprites)
+GameManager::GameManager(int numberOfPlayers, Deck & deck, GraphicsHelper & graphics, const vector<shared_ptr<ColorSprite>> colorSprites)
 {
 	numberOfPlayers = 4;
 	deck.shuffle();
@@ -16,7 +16,7 @@ GameManager::GameManager(int numberOfPlayers, Deck & deck, GraphicsHelper & grap
 	TopHasBeenPlayed = make_shared<bool>(false);
 	ColorToBePlayed = make_shared<CardFunctionColor>(CardFunctionColor::heart);
 
-	RealPlayer = make_shared<HumanPlayer>(HumanPlayer(Vector2f(graphics.ScreenWidth / 2 - 300, graphics.ScreenHeight - 200), graphics, choosingColor));
+	RealPlayer = make_shared<HumanPlayer>(HumanPlayer(Vector2f(graphics.ScreenWidth / 2 - 300, graphics.ScreenHeight - 200), graphics));
 	Players.push_back(RealPlayer);
 	
 	vector<Vector2f> positionOfFirstCardSpriteOfPlayer{ Vector2f(200, 200), Vector2f(graphics.ScreenWidth/2, 200), Vector2f(graphics.ScreenWidth - 300, 200) };
@@ -125,7 +125,7 @@ void GameManager::humanTakeCards(GraphicsHelper & graphics, Deck & deck)
 	checkUserInputRecieved();
 }
 
-void GameManager::playOneTurn(GraphicsHelper & graphics, Deck & deck)
+void GameManager::playOneTurn(GraphicsHelper & graphics, Deck & deck, bool & choosingColor)
 {
 	//makes the player on turn play
 	if (NumberOfPlayers <= 1)
@@ -156,23 +156,23 @@ void GameManager::playOneTurn(GraphicsHelper & graphics, Deck & deck)
 		}
 
 		userInputReceived = false;
-		if ((*playerOnTurn->choosingColor))
+		if (choosingColor)
 		{
 			if (playerOnTurn->tryChooseAColor(ColorToBePlayed, colorSprites))
 			{
-				(*playerOnTurn->choosingColor) = false;
+				choosingColor = false;
 				userInputReceived = true;
 			}
 		}
 
-		if (playerOnTurn->tryPlayACard(playedCard, topCard, TopHasBeenPlayed, ColorToBePlayed, CardsToTake, NumberOfPlayersSkippedByAce))
+		if (playerOnTurn->tryPlayACard(playedCard, topCard, TopHasBeenPlayed, ColorToBePlayed, CardsToTake, NumberOfPlayersSkippedByAce, choosingColor))
 		{
 			evaluatePlayedCard(playedCard);
 			if (playedCard->Color == CardFunctionColor::leaf && playedCard->Number == CardFunctionNumber::bot)
 			{
 				evaluateLeafBotCard();
 			}
-			if (!(*playerOnTurn->choosingColor))
+			if (!choosingColor)
 			{
 				userInputReceived = true;
 			}

@@ -1,9 +1,8 @@
 #include "HumanPlayer.h"
 #include <iostream>
 
-HumanPlayer::HumanPlayer(const Vector2f positionOfFirstCard, GraphicsHelper & graphics, const shared_ptr<bool> choosingColor) : Player(positionOfFirstCard, graphics)
+HumanPlayer::HumanPlayer(const Vector2f positionOfFirstCard, GraphicsHelper & graphics) : Player(positionOfFirstCard, graphics)
 {
-	this->choosingColor = choosingColor;
 }
 
 bool HumanPlayer::tryChooseAColor(shared_ptr<CardFunctionColor> colorToBePlayed, const vector<shared_ptr<ColorSprite>> & colorOptions)
@@ -143,7 +142,7 @@ bool HumanPlayer::tryTakeACard(Deck & deck)
 	return false;
 }
 
-bool HumanPlayer::tryPlayACard(unique_ptr<Card>& cardToPlay, const ColorNumber& topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait)
+bool HumanPlayer::tryPlayACard(unique_ptr<Card>& cardToPlay, const ColorNumber& topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait, bool & choosingColor)
 {
 	for (int i = 0; i < cards.size(); ++i)
 	{
@@ -155,7 +154,7 @@ bool HumanPlayer::tryPlayACard(unique_ptr<Card>& cardToPlay, const ColorNumber& 
 				cards.erase(cards.begin() + i);
 				if (cardToPlay->Number == CardFunctionNumber::top)
 				{
-					(*choosingColor) = true;
+					choosingColor = true;
 				}
 				return true;
 			}

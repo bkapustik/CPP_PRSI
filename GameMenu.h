@@ -33,7 +33,7 @@ private:
 	Deck deck;
 	GraphicsHelper graphics;
 	shared_ptr<Texture> cardBackSide;
-	shared_ptr<bool> isHumanChoosingColor;
+	bool isHumanChoosingColor;
 
 	Text winText;
 	Text loseText;
