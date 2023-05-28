@@ -4,13 +4,11 @@
 
 using namespace std;
 
-Menu::Menu(float screenWidth, float screenHeight, const shared_ptr<RenderWindow> window, float secondsToWaitBetweenEachRound,const shared_ptr<Clock> clock)
+Menu::Menu(float screenWidth, float screenHeight, float secondsToWaitBetweenEachRound)
 {
-	this->clock = clock;
 	this->screenWidth = screenWidth;
 	this->screenHeight = screenHeight;
 	this->secondsToWaitBetweenEachRound = secondsToWaitBetweenEachRound;
-	this->window = window;
 	this->gameState = GameState::initial;
 	cards = opener.getCards();
 	cardBackSide = opener.getCardBackSide();
@@ -50,9 +48,9 @@ void Menu::playOneTurn()
 	gameManager.playOneTurn(graphics, deck, isHumanChoosingColor);
 }
 
-void Menu::displayGame()
+void Menu::displayGame(Clock & clock, RenderWindow & window)
 {
-	if (clock->getElapsedTime() > seconds(secondsToWaitBetweenEachRound) && gameManager.userInputReceived)
+	if (clock.getElapsedTime() > seconds(secondsToWaitBetweenEachRound) && gameManager.userInputReceived)
 	{
 		if (gameManager.PlayerHasFinished)
 		{
@@ -66,42 +64,42 @@ void Menu::displayGame()
 				gameState = GameState::playerLost;
 			}
 		}
-		clock->restart();
+		clock.restart();
 	}
 
-	window->draw((*deck.frontDeckCard->sprite));
+	window.draw((*deck.frontDeckCard->sprite));
 
 	for (auto& sprite : deck.sprites)
 	{
-		window->draw((*sprite));
+		window.draw((*sprite));
 	}
 
 	for (auto player : gameManager.Players)
 	{
 		for (auto& card : player->cards)
 		{
-			window->draw((*card.sprite));
+			window.draw((*card.sprite));
 		}
 	}
 
 	if (gameManager.playerEvent == beingSkipped)
 	{
-		window->draw((*beSkippedButton.sprite));
-		window->draw((*beSkippedButton.text));
+		window.draw((*beSkippedButton.sprite));
+		window.draw((*beSkippedButton.text));
 	}
 
 	if (gameManager.playerEvent == hasToTakeACard)
 	{
-		window->draw((*takeCardsButton.sprite));
-		window->draw((*takeCardsButton.text));
+		window.draw((*takeCardsButton.sprite));
+		window.draw((*takeCardsButton.text));
 	}
 }
 
-void Menu::displayColorOptions()
+void Menu::displayColorOptions(RenderWindow & window)
 {
 	for (auto colorOption : gameManager.colorSprites)
 	{
-		window->draw((*colorOption->sprite));
+		window.draw((*colorOption->sprite));
 	}
 }
 
@@ -137,32 +135,32 @@ void Menu::tryReactToMenuEvent()
 	}
 }
 
-void Menu::render()
+void Menu::render(Clock & clock, RenderWindow & window)
 {
 	if (isHumanChoosingColor)
 	{
-		displayColorOptions();
+		displayColorOptions(window);
 	}
 	else if (gameState == GameState::playing)
 	{
-		displayGame();
+		displayGame(clock, window);
 	}
 	else
 	{
-		displayMenu();
+		displayMenu(window);
 	}
 }
 
-void Menu::displayMenu()
+void Menu::displayMenu(RenderWindow & window)
 {
-	window->draw(menuButton);
+	window.draw(menuButton);
 	if (gameState == GameState::playerWon)
 	{
-		window->draw(winText);
+		window.draw(winText);
 	}
 
 	if (gameState == GameState::playerLost)
 	{
-		window->draw(loseText);
+		window.draw(loseText);
 	}
 }

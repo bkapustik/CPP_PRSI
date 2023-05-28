@@ -13,9 +13,9 @@ enum class GameState
 class Menu
 {
 private:
-	void displayMenu();
-	void displayGame();
-	void displayColorOptions();
+	void displayMenu(RenderWindow & window);
+	void displayGame(Clock & clock, RenderWindow & window);
+	void displayColorOptions(RenderWindow & window);
 
 	float screenWidth;
 	float screenHeight;
@@ -29,7 +29,6 @@ private:
 	unique_ptr<Texture> startTexture;
 	unique_ptr<Texture> restartTexture;
 	
-	shared_ptr<Clock> clock;
 	Deck deck;
 	GraphicsHelper graphics;
 	shared_ptr<Texture> cardBackSide;
@@ -45,11 +44,10 @@ public:
 	GameState gameState;
 	GameManager gameManager;
 	Sprite background;
-	shared_ptr<RenderWindow> window;
 
-	Menu(float screenWidth, float screenHeight, const shared_ptr<RenderWindow> window, float secondsToWaitBetweenEachRound,const shared_ptr<Clock> clock);
+	Menu(float screenWidth, float screenHeight, float secondsToWaitBetweenEachRound);
 	
-	void render();
+	void render(Clock & clock, RenderWindow & window);
 	void tryReactToMenuEvent();
 	void playOneTurn();
 };

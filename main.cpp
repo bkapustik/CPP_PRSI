@@ -10,20 +10,20 @@ int main()
 	float screenWidth = 1920;
 	float screenHeight = 1080;
 	
-	auto window = make_shared<RenderWindow>(VideoMode(VideoMode(screenWidth, screenHeight)), "Prsi");
-	auto clock = make_shared<Clock>(Clock());
+	RenderWindow window(VideoMode(screenWidth, screenHeight), "Prsi");
+	auto clock = Clock();
 
 	Event event;
 
-	Menu menu = Menu(screenWidth, screenHeight, window, secondsToWaitBetweenEachRound, clock);
+	Menu menu = Menu(screenWidth, screenHeight, secondsToWaitBetweenEachRound);
 
-	while (window->isOpen()) {
+	while (window.isOpen()) {
 
-		while (window->pollEvent(event)) {
+		while (window.pollEvent(event)) {
 
 			if (event.type == Event::Closed)
 			{
-				window->close();
+				window.close();
 			}
 			if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
 			{
@@ -31,19 +31,19 @@ int main()
 				{
 					menu.playOneTurn();
 
-					clock->restart();
+					clock.restart();
 				}
 				menu.tryReactToMenuEvent();
 			}
 		}
 
-		window->clear(Color::White);
+		window.clear(Color::White);
 
-		window->draw(menu.background);
+		window.draw(menu.background);
 
-		menu.render();
+		menu.render(clock, window);
 
-		window->display();
+		window.display();
 	}
 
 	return 0;
