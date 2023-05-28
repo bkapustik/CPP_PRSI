@@ -38,3 +38,27 @@ This should create a MakeFile, so you use command
 make
 ```
 Then you can start the executable.
+  
+  
+##### Supported and tested senarios
+  
+So far the game is capable of caasual playing according to official game rules.
+When any player plays Ace, another player has to either be skipped or play ace as well.
+If multiple players play ace, the effect is stacked.
+
+Player can be skipped either by a displayed button or pressing the deck.
+  
+Similliar scenarios happen when a player plays card 7. Next player has to either take 3 cards, or play green Bot or play 7.
+The effect is stacked as well.
+  
+If you as a human player play cardd Top, you have to chose a color which will be played.
+
+A computer player has to follow these rules and if he plays Top, he will chose a random color.
+  
+There are exactly 32 cards in the game which are rotated between players.
+  
+If you have 0 cards you win.
+  
+If all other players have 0 cards you lose.
+  
+If the game is beginning or you lose or win, the game is stopped until you press a button to start the game. Then all values are reset and game starts again.
