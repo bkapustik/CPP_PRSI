@@ -20,7 +20,7 @@ private:
 	int CardsToTake;
 	int NumberOfPlayersSkippedByAce;
 
-	shared_ptr<bool> TopHasBeenPlayed;
+	bool TopHasBeenPlayed;
 	shared_ptr<CardFunctionColor> ColorToBePlayed;
 	shared_ptr<HumanPlayer> RealPlayer;
 

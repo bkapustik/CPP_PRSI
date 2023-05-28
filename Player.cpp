@@ -63,11 +63,11 @@ CardFunctionColor Player::getRandomColor() const
 	return (colors[randomNumber]);
 }
 
-bool Player::tryPlayACard(unique_ptr<Card>& cardToPlay, const ColorNumber& topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed)
+bool Player::tryPlayACard(unique_ptr<Card>& cardToPlay, const ColorNumber& topDeckCard, bool & topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed)
 {
 	CardFunctionColor colorToPlay = topDeckCard.Color;
 
-	if ((*topHasBeenPlayed))
+	if (topHasBeenPlayed)
 	{
 		if (colorToBePlayed)
 		{

@@ -82,9 +82,9 @@ bool HumanPlayer::wantsCustomTurn() const
 	return true;
 }
 
-bool HumanPlayer::canUseThisCard(CardSprite& card, const ColorNumber& topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait)
+bool HumanPlayer::canUseThisCard(CardSprite& card, const ColorNumber& topDeckCard, bool & topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait)
 {
-	if ((*topHasBeenPlayed))
+	if (topHasBeenPlayed)
 	{
 		if (colorToBePlayed)
 		{
@@ -142,7 +142,7 @@ bool HumanPlayer::tryTakeACard(Deck & deck)
 	return false;
 }
 
-bool HumanPlayer::tryPlayACard(unique_ptr<Card>& cardToPlay, const ColorNumber& topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait, bool & choosingColor)
+bool HumanPlayer::tryPlayACard(unique_ptr<Card>& cardToPlay, const ColorNumber& topDeckCard, bool & topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait, bool & choosingColor)
 {
 	for (int i = 0; i < cards.size(); ++i)
 	{

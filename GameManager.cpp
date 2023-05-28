@@ -13,7 +13,7 @@ GameManager::GameManager(int numberOfPlayers, Deck & deck, GraphicsHelper & grap
 	NumberOfPlayersSkippedByAce = 0;
 	NumberOfPlayers = numberOfPlayers;
 	this->colorSprites = colorSprites;
-	TopHasBeenPlayed = make_shared<bool>(false);
+	TopHasBeenPlayed = false;
 	ColorToBePlayed = make_shared<CardFunctionColor>(CardFunctionColor::heart);
 
 	RealPlayer = make_shared<HumanPlayer>(HumanPlayer(Vector2f(graphics.ScreenWidth / 2 - 300, graphics.ScreenHeight - 200), graphics));
@@ -90,7 +90,7 @@ void GameManager::removeFinishedPlayer()
 
 void GameManager::evaluateTopCard()
 {
-	(*TopHasBeenPlayed) = true;
+	TopHasBeenPlayed = true;
 }
 
 void GameManager::evaluatePlayedCard(const unique_ptr<Card>& card)
@@ -228,7 +228,7 @@ void GameManager::playOneTurn(GraphicsHelper & graphics, Deck & deck, bool & cho
 
 		else if (playerOnTurn->tryPlayACard(playedCard, topCard, TopHasBeenPlayed, ColorToBePlayed))
 		{
-			TopHasBeenPlayed = make_shared<bool>(false);
+			TopHasBeenPlayed = false;
 			evaluatePlayedCard(playedCard);
 			deck.addACard(move(playedCard), graphics);
 		}

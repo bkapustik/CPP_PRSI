@@ -5,7 +5,7 @@
 class HumanPlayer : public Player
 {
 private : 
-	bool canUseThisCard(CardSprite& card, const ColorNumber& topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait);
+	bool canUseThisCard(CardSprite& card, const ColorNumber& topDeckCard, bool & topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait);
 	bool isSpriteClicked(const unique_ptr<Sprite>& sprite) const;
 	bool isSpriteClicked(const Sprite& sprite) const;
 public:
@@ -15,7 +15,7 @@ public:
 	
 	void checkPlayersCards(GraphicsHelper & graphics) override;
 	bool wantsCustomTurn() const override;
-	bool tryPlayACard(unique_ptr<Card>& cardToPlay, const ColorNumber& topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait, bool & choosingColor) override;
+	bool tryPlayACard(unique_ptr<Card>& cardToPlay, const ColorNumber& topDeckCard, bool & topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait, bool & choosingColor) override;
 	bool tryTakeACard(Deck & deck) override;
 	bool tryChooseAColor(shared_ptr<CardFunctionColor> colorToBePlayed, const vector<shared_ptr<ColorSprite>> & colorOptions) override;
 };

@@ -25,7 +25,7 @@ public:
 		return false;
 	}
 
-	bool virtual tryPlayACard(unique_ptr<Card>& cardToPlay, const ColorNumber& topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait, bool & choosingColor)
+	bool virtual tryPlayACard(unique_ptr<Card>& cardToPlay, const ColorNumber& topDeckCard, bool & topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait, bool & choosingColor)
 	{
 		return false;
 	}
@@ -46,6 +46,6 @@ public:
 	void cancelIsOnTurn();
 	bool tryCanCancelTakingACard(unique_ptr<Card>& cancellingCard);
 	bool tryCanCancelBeingSkipped(unique_ptr<Card>& cancellingCard);
-	bool virtual tryPlayACard(unique_ptr<Card>& card, const ColorNumber& topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed);
+	bool virtual tryPlayACard(unique_ptr<Card>& card, const ColorNumber& topDeckCard, bool & topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed);
 	void virtual checkPlayersCards(GraphicsHelper & graphics);
 };
