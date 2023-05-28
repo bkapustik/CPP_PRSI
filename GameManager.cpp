@@ -5,23 +5,21 @@ GameManager::GameManager()
 	
 }
 
-GameManager::GameManager(int numberOfPlayers, shared_ptr<Deck> deck, const shared_ptr<GraphicsHelper> graphicsHelper, shared_ptr<bool> choosingColor, const vector<shared_ptr<ColorSprite>> colorSprites)
+GameManager::GameManager(int numberOfPlayers, Deck & deck, GraphicsHelper & graphics, shared_ptr<bool> choosingColor, const vector<shared_ptr<ColorSprite>> colorSprites)
 {
 	numberOfPlayers = 4;
-	deck->shuffle();
+	deck.shuffle();
 	CardsToTake = 0;
 	NumberOfPlayersSkippedByAce = 0;
-	GameDeck = deck;
 	NumberOfPlayers = numberOfPlayers;
 	this->colorSprites = colorSprites;
 	TopHasBeenPlayed = make_shared<bool>(false);
 	ColorToBePlayed = make_shared<CardFunctionColor>(CardFunctionColor::heart);
-	graphics = graphicsHelper;
 
-	RealPlayer = make_shared<HumanPlayer>(HumanPlayer(Vector2f(graphics->ScreenWidth / 2 - 300, graphics->ScreenHeight - 200), graphics, deck, choosingColor));
+	RealPlayer = make_shared<HumanPlayer>(HumanPlayer(Vector2f(graphics.ScreenWidth / 2 - 300, graphics.ScreenHeight - 200), graphics, choosingColor));
 	Players.push_back(RealPlayer);
 	
-	vector<Vector2f> positionOfFirstCardSpriteOfPlayer{ Vector2f(200, 200), Vector2f(graphics->ScreenWidth/2, 200), Vector2f(graphics->ScreenWidth - 300, 200) };
+	vector<Vector2f> positionOfFirstCardSpriteOfPlayer{ Vector2f(200, 200), Vector2f(graphics.ScreenWidth/2, 200), Vector2f(graphics.ScreenWidth - 300, 200) };
 
 	for (int i = 0; i < numberOfPlayers-1; i++)
 	{
@@ -34,17 +32,17 @@ GameManager::GameManager(int numberOfPlayers, shared_ptr<Deck> deck, const share
 
 	for (auto player : Players)
 	{
-		giveNCardsToPlayer(player, numberOfCardsAtTheBeginning);
+		giveNCardsToPlayer(player, numberOfCardsAtTheBeginning, deck, graphics);
 	}
 
 	playerEvent = notPlaying;
 }
 
-void GameManager::giveNCardsToPlayer(shared_ptr<Player> player, int n)
+void GameManager::giveNCardsToPlayer(shared_ptr<Player> player, int n, Deck & deck, GraphicsHelper & graphics)
 {
-	vector<unique_ptr<Card>> cardsTaken = GameDeck->getNCards(n);
+	vector<unique_ptr<Card>> cardsTaken = deck.getNCards(n);
 
-	player->takeCards(cardsTaken);
+	player->takeCards(cardsTaken, graphics);
 }
 
 void GameManager::evaluateCardWithNumberSeven()
@@ -119,15 +117,15 @@ void GameManager::humanSkip()
 	checkUserInputRecieved();
 }
 
-void GameManager::humanTakeCards()
+void GameManager::humanTakeCards(GraphicsHelper & graphics, Deck & deck)
 {
-	giveNCardsToPlayer(Players[PlayerOnTurn], CardsToTake);
+	giveNCardsToPlayer(Players[PlayerOnTurn], CardsToTake, deck, graphics);
 	CardsToTake = 0;
 	userInputReceived = true;
 	checkUserInputRecieved();
 }
 
-void GameManager::playOneTurn()
+void GameManager::playOneTurn(GraphicsHelper & graphics, Deck & deck)
 {
 	//makes the player on turn play
 	if (NumberOfPlayers <= 1)
@@ -139,7 +137,7 @@ void GameManager::playOneTurn()
 
 	unique_ptr<Card> playedCard = make_unique<Card>();
 
-	auto topCard = ColorNumber(GameDeck->frontDeckCard->card->Color, GameDeck->frontDeckCard->card->Number);
+	auto topCard = ColorNumber(deck.frontDeckCard->card->Color, deck.frontDeckCard->card->Number);
 
 	playerOnTurn->setOnTurn();
 	if (playerOnTurn->wantsCustomTurn() || !userInputReceived)
@@ -178,9 +176,9 @@ void GameManager::playOneTurn()
 			{
 				userInputReceived = true;
 			}
-			GameDeck->addACard(move(playedCard));
+			deck.addACard(move(playedCard), graphics);
 		}
-		else if (playerOnTurn->tryTakeACard())
+		else if (playerOnTurn->tryTakeACard(deck))
 		{
 			if (NumberOfPlayersSkippedByAce > 0)
 			{
@@ -188,7 +186,7 @@ void GameManager::playOneTurn()
 			}
 			else
 			{
-				giveNCardsToPlayer(playerOnTurn, CardsToTake > 0 ? CardsToTake : 1);
+				giveNCardsToPlayer(playerOnTurn, CardsToTake > 0 ? CardsToTake : 1, deck, graphics);
 				CardsToTake = 0;
 			}
 			userInputReceived = true;
@@ -204,11 +202,11 @@ void GameManager::playOneTurn()
 			if (playerOnTurn->tryCanCancelTakingACard(cancellingCard))
 			{
 				evaluateCardTakingCancellingCard(cancellingCard);
-				GameDeck->addACard(move(cancellingCard));
+				deck.addACard(move(cancellingCard), graphics);
 			}
 			else
 			{
-				giveNCardsToPlayer(playerOnTurn, CardsToTake);
+				giveNCardsToPlayer(playerOnTurn, CardsToTake, deck, graphics);
 				CardsToTake = 0;
 			}
 		}
@@ -220,7 +218,7 @@ void GameManager::playOneTurn()
 			if (playerOnTurn->tryCanCancelBeingSkipped(cancellingCard))
 			{
 				evaluateSkippingCard();
-				GameDeck->addACard(move(cancellingCard));
+				deck.addACard(move(cancellingCard), graphics);
 			}
 			else
 			{
@@ -232,15 +230,15 @@ void GameManager::playOneTurn()
 		{
 			TopHasBeenPlayed = make_shared<bool>(false);
 			evaluatePlayedCard(playedCard);
-			GameDeck->addACard(move(playedCard));
+			deck.addACard(move(playedCard), graphics);
 		}
 		else
 		{
 			//No card to take so the player has to take one
-			giveNCardsToPlayer(playerOnTurn, 1);
+			giveNCardsToPlayer(playerOnTurn, 1, deck, graphics);
 		}
 	}
-	playerOnTurn->checkPlayersCards();
+	playerOnTurn->checkPlayersCards(graphics);
 	checkUserInputRecieved();
 }
 

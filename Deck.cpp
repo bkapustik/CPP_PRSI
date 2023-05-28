@@ -4,26 +4,25 @@
 
 using namespace std;
 
-Sprite Deck::createBackSprite(const int shift)
+Sprite Deck::createBackSprite(const int shift, GraphicsHelper & graphics)
 {
-	auto newSprite = Sprite((*graphics->backCardSideTexture));
+	auto newSprite = Sprite((*graphics.backCardSideTexture));
 
-	graphics->scaleCardSize(newSprite);
-	graphics->setPositionRelativeToCardSize(newSprite, PositionOfFirstCard.x + 10 * shift, PositionOfFirstCard.y);
+	graphics.scaleCardSize(newSprite);
+	graphics.setPositionRelativeToCardSize(newSprite, PositionOfFirstCard.x + 10 * shift, PositionOfFirstCard.y);
 
 	return newSprite;
 }
 
-void Deck::changeShownCard()
+void Deck::changeShownCard(GraphicsHelper & graphics)
 {
-	graphics->scaleCardSize((*frontDeckCard->sprite));
-	graphics->setPositionRelativeToCardSize((*frontDeckCard->sprite), graphics->ScreenWidth / 2, graphics->ScreenHeight / 2);
+	graphics.scaleCardSize((*frontDeckCard->sprite));
+	graphics.setPositionRelativeToCardSize((*frontDeckCard->sprite), graphics.ScreenWidth / 2, graphics.ScreenHeight / 2);
 }
 
-Deck::Deck(vector<unique_ptr<Card>>& cards, const shared_ptr<GraphicsHelper> graphics)
+Deck::Deck(vector<unique_ptr<Card>>& cards, GraphicsHelper & graphics)
 {
-	this->PositionOfFirstCard = Vector2f(graphics->ScreenWidth / 2 + 200, graphics->ScreenHeight / 2);
-	this->graphics = graphics;
+	this->PositionOfFirstCard = Vector2f(graphics.ScreenWidth / 2 + 200, graphics.ScreenHeight / 2);
 	sprites = vector<unique_ptr<Sprite>>();
 
 	random_device rd;
@@ -33,12 +32,12 @@ Deck::Deck(vector<unique_ptr<Card>>& cards, const shared_ptr<GraphicsHelper> gra
 	for (int i = 0;i < cards.size() - 1; i++)
 	{
 		Cards.push(move(cards[i]));
-		auto newSprite = make_unique<Sprite>(createBackSprite(i));
+		auto newSprite = make_unique<Sprite>(createBackSprite(i, graphics));
 		sprites.push_back(move(newSprite));
 	}
 
 	frontDeckCard = make_unique<CardSprite>(move(cards[cards.size() - 1]));
-	changeShownCard();
+	changeShownCard(graphics);
 }
 
 void Deck::shuffle(vector<shared_ptr<Card>>& cards)
@@ -97,12 +96,12 @@ vector<unique_ptr<Card>> Deck::getNCards(int n)
 	return cards;
 }
 
-void Deck::addACard(unique_ptr<Card> card)
+void Deck::addACard(unique_ptr<Card> card, GraphicsHelper & graphics)
 {
 	Cards.push(move(frontDeckCard->card));
 	frontDeckCard = make_unique<CardSprite>(move(card));
-	changeShownCard();
-	auto newSprite = make_unique<Sprite>(createBackSprite(sprites.size() - 1));
+	changeShownCard(graphics);
+	auto newSprite = make_unique<Sprite>(createBackSprite(sprites.size() - 1, graphics));
 	sprites.push_back(move(newSprite));
 }
 

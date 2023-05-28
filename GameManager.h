@@ -20,10 +20,8 @@ private:
 	int CardsToTake;
 	int NumberOfPlayersSkippedByAce;
 
-	shared_ptr<GraphicsHelper> graphics;
 	shared_ptr<bool> TopHasBeenPlayed;
 	shared_ptr<CardFunctionColor> ColorToBePlayed;
-	shared_ptr<Deck> GameDeck;
 	shared_ptr<HumanPlayer> RealPlayer;
 
 	void evaluateCardTakingCancellingCard(const unique_ptr<Card>& card);
@@ -31,13 +29,13 @@ private:
 	void evaluateCardWithNumberSeven();
 	void evaluateTopCard();
 	void evaluateLeafBotCard();
-	void giveNCardsToPlayer(shared_ptr<Player> player, int n);
+	void giveNCardsToPlayer(shared_ptr<Player> player, int n, Deck & deck, GraphicsHelper & graphics);
 	void removeFinishedPlayer();
 	void checkUserInputRecieved();
 	void evaluatePlayedCard(const unique_ptr<Card>& card);
 public:
 	GameManager();
-	GameManager(int numberOfPlayers, shared_ptr<Deck> deck, const shared_ptr<GraphicsHelper> graphicsHelper, shared_ptr<bool> choosingColor, const vector<shared_ptr<ColorSprite>> colorSprites);
+	GameManager(int numberOfPlayers, Deck & deck, GraphicsHelper & graphics, shared_ptr<bool> choosingColor, const vector<shared_ptr<ColorSprite>> colorSprites);
 	
 	bool PlayerHasFinished = false;
 	bool userInputReceived = true;
@@ -47,8 +45,8 @@ public:
 	vector<shared_ptr<ColorSprite>> colorSprites;
 	vector<shared_ptr<Player>> Players;
 	
-	void playOneTurn();
+	void playOneTurn(GraphicsHelper & graphics, Deck & deck);
 	void humanSkip();
-	void humanTakeCards();
+	void humanTakeCards(GraphicsHelper & graphics, Deck & deck);
 };
 

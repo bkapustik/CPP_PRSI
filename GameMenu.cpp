@@ -11,11 +11,12 @@ Menu::Menu(float screenWidth, float screenHeight, const shared_ptr<RenderWindow>
 	this->screenHeight = screenHeight;
 	this->secondsToWaitBetweenEachRound = secondsToWaitBetweenEachRound;
 	this->window = window;
+	this->gameState = GameState::initial;
 	cards = opener.getCards();
 	cardBackSide = opener.getCardBackSide();
-	graphics = make_shared<GraphicsHelper>(2, 2, screenWidth, screenHeight, (*cards[0]), opener.getCardBackSide());
+	graphics = GraphicsHelper(2, 2, screenWidth, screenHeight, (*cards[0]), opener.getCardBackSide());
 
-	deck = make_shared<Deck>(Deck(cards, graphics));
+	deck = Deck(cards, graphics);
 	isHumanChoosingColor = make_shared<bool>(false);
 	colorSprites = opener.getColorSprites(screenWidth, screenHeight);
 
@@ -30,9 +31,9 @@ Menu::Menu(float screenWidth, float screenHeight, const shared_ptr<RenderWindow>
 	menuButton = Sprite(*this->startTexture);
 	menuButton.setPosition((screenWidth - this->startTexture->getSize().x) / 2, (screenHeight - this->startTexture->getSize().y) / 2);
 
-	winText = graphics->getText("You Win!");
+	winText = graphics.getText("You Win!");
 	winText.setFillColor(Color::Green);
-	loseText = graphics->getText("You Lose!");
+	loseText = graphics.getText("You Lose!");
 
 	winText.setPosition(screenWidth / 2 - winText.getGlobalBounds().width / 2, screenHeight / 2 - 200);
 	loseText.setPosition(screenWidth / 2 - loseText.getGlobalBounds().width / 2, screenHeight / 2 - 200);
@@ -44,11 +45,16 @@ Menu::Menu(float screenWidth, float screenHeight, const shared_ptr<RenderWindow>
 	beSkippedButton = opener.getButton("Be Skipped", buttonWidth, buttonHeight, screenWidth / 2 - 200, screenHeight / 2);
 }
 
+void Menu::playOneTurn()
+{
+	gameManager.playOneTurn(graphics, deck);
+}
+
 void Menu::displayGame()
 {
 	if (clock->getElapsedTime() > seconds(secondsToWaitBetweenEachRound) && gameManager.userInputReceived)
 	{
-		gameManager.playOneTurn();
+		gameManager.playOneTurn(graphics, deck);
 		if (gameManager.Players.size() <= 1)
 		{
 			gameState = GameState::playerLost;
@@ -56,9 +62,9 @@ void Menu::displayGame()
 		clock->restart();
 	}
 
-	window->draw((*deck->frontDeckCard->sprite));
+	window->draw((*deck.frontDeckCard->sprite));
 
-	for (auto& sprite : deck->sprites)
+	for (auto& sprite : deck.sprites)
 	{
 		window->draw((*sprite));
 	}
@@ -99,7 +105,7 @@ void Menu::tryReactToMenuEvent()
 		if (Click::isClicked(menuButton))
 		{
 			cards = opener.getCards();
-			deck = make_shared<Deck>(Deck(cards, graphics));
+			deck = Deck(cards, graphics);
 			this->gameManager = GameManager(4, deck, graphics, isHumanChoosingColor, colorSprites);
 			gameState = GameState::playing;
 			menuButton = Sprite(*this->restartTexture);
@@ -119,7 +125,7 @@ void Menu::tryReactToMenuEvent()
 	{
 		if (Click::isClicked((*takeCardsButton.sprite)))
 		{
-			gameManager.humanTakeCards();
+			gameManager.humanTakeCards(graphics, deck);
 		}
 	}
 }

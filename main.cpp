@@ -23,15 +23,13 @@ int main()
 
 			if (event.type == Event::Closed)
 			{
-
 				window->close();
 			}
 			if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
 			{
 				if (!menu.gameManager.userInputReceived)
 				{
-					menu.gameManager.playOneTurn();
-					
+					menu.playOneTurn();
 					if (menu.gameManager.PlayerHasFinished)
 					{
 						menu.gameState = GameState::playerWon;

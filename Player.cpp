@@ -1,25 +1,24 @@
 #include "Player.h"
 
-Player::Player(const Vector2f positionOfFirstCard, const shared_ptr<GraphicsHelper> graphics)
+Player::Player(const Vector2f positionOfFirstCard, GraphicsHelper & graphics)
 {
 	isOnTurn = false;
 	hasFinished = false;
 	PositionOfFirstCard = positionOfFirstCard;
-	this->graphics = graphics;
 	cards = vector<CardSprite>();
 }
 
-void Player::takeCards(vector<unique_ptr<Card>>& cards)
+void Player::takeCards(vector<unique_ptr<Card>>& cards, GraphicsHelper & graphics)
 {
 	for (int i = 0; i < this->cards.size(); i++)
 	{
-		graphics->setPositionRelativeToCardSize(this->cards[i].sprite, PositionOfFirstCard.x + i * 30, PositionOfFirstCard.y);
+		graphics.setPositionRelativeToCardSize(this->cards[i].sprite, PositionOfFirstCard.x + i * 30, PositionOfFirstCard.y);
 	}
 	for (auto& card : cards)
 	{
 		CardSprite cardSprite = CardSprite(move(card));
-		graphics->scaleCardSize(cardSprite.sprite);
-		graphics->setPositionRelativeToCardSize(cardSprite.sprite, PositionOfFirstCard.x + this->cards.size() * 30, PositionOfFirstCard.y);
+		graphics.scaleCardSize(cardSprite.sprite);
+		graphics.setPositionRelativeToCardSize(cardSprite.sprite, PositionOfFirstCard.x + this->cards.size() * 30, PositionOfFirstCard.y);
 		this->cards.push_back(move(cardSprite));
 	}
 }
@@ -147,11 +146,11 @@ bool Player::tryReturnCardOfColorAndNumber(const CardFunctionColor& color,const 
 	return false;
 }
 
-void Player::checkPlayersCards()
+void Player::checkPlayersCards(GraphicsHelper & graphics)
 {
 	for (int i = 0; i < cards.size(); i++)
 	{
-		graphics->setPositionRelativeToCardSize(cards[i].sprite, PositionOfFirstCard.x + i * 20, PositionOfFirstCard.y);
+		graphics.setPositionRelativeToCardSize(cards[i].sprite, PositionOfFirstCard.x + i * 20, PositionOfFirstCard.y);
 	}
 	if (cards.empty())
 	{

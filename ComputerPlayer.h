@@ -4,7 +4,7 @@
 class ComputerPlayer : public Player
 {
 	public:
-		ComputerPlayer(const Vector2f positionOfFirstCard, const shared_ptr<GraphicsHelper> graphics);
+		ComputerPlayer(const Vector2f positionOfFirstCard, GraphicsHelper & graphics);
 
 		bool tryPlayACard(unique_ptr<Card>& cardToPlay, const ColorNumber& topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait) override
 		{

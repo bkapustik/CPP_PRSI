@@ -29,6 +29,11 @@ public :
 		const shared_ptr<Texture> backCardSideTexture
 	);
 
+	GraphicsHelper()
+	{
+		
+	}
+
 	void scaleCardSize(unique_ptr<Sprite>& card);
 	void scaleCardSize(Sprite& card);
 	void setPositionRelativeToCardSize(unique_ptr<Sprite>& card, float width, float height);

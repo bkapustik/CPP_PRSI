@@ -30,16 +30,15 @@ public:
 	{
 		return false;
 	}
-	bool virtual tryTakeACard()
+	bool virtual tryTakeACard(Deck & deck)
 	{
 		return false;
 	}
 
 	Vector2f PositionOfFirstCard;
-	shared_ptr<GraphicsHelper> graphics;
-	Player(const Vector2f positionOfFirstCard, const shared_ptr<GraphicsHelper> graphics);
+	Player(const Vector2f positionOfFirstCard, GraphicsHelper & graphics);
 	vector<CardSprite> cards;
-	void virtual takeCards(vector<unique_ptr<Card>>& cards);
+	void virtual takeCards(vector<unique_ptr<Card>>& cards, GraphicsHelper & graphics);
 	void setOnTurn();
 	bool virtual wantsCustomTurn() const
 	{
@@ -49,5 +48,5 @@ public:
 	bool tryCanCancelTakingACard(unique_ptr<Card>& cancellingCard);
 	bool tryCanCancelBeingSkipped(unique_ptr<Card>& cancellingCard);
 	bool virtual tryPlayACard(unique_ptr<Card>& card, const ColorNumber& topDeckCard, shared_ptr<bool>& topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed);
-	void virtual checkPlayersCards();
+	void virtual checkPlayersCards(GraphicsHelper & graphics);
 };

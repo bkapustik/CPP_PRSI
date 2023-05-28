@@ -30,8 +30,8 @@ private:
 	unique_ptr<Texture> restartTexture;
 	
 	shared_ptr<Clock> clock;
-	shared_ptr<Deck> deck;
-	shared_ptr<GraphicsHelper> graphics;
+	Deck deck;
+	GraphicsHelper graphics;
 	shared_ptr<Texture> cardBackSide;
 	shared_ptr<bool> isHumanChoosingColor;
 
@@ -51,4 +51,5 @@ public:
 	
 	void render();
 	void tryReactToMenuEvent();
+	void playOneTurn();
 };

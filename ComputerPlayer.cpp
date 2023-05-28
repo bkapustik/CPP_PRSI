@@ -1,6 +1,6 @@
 #include "ComputerPlayer.h"
 
-ComputerPlayer::ComputerPlayer(const Vector2f positionOfFirstCard,const shared_ptr<GraphicsHelper> graphics) : Player(positionOfFirstCard, graphics)
+ComputerPlayer::ComputerPlayer(const Vector2f positionOfFirstCard, GraphicsHelper & graphics) : Player(positionOfFirstCard, graphics)
 {
 
 }

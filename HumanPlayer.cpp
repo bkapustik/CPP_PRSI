@@ -1,9 +1,8 @@
 #include "HumanPlayer.h"
 #include <iostream>
 
-HumanPlayer::HumanPlayer(const Vector2f positionOfFirstCard, const shared_ptr<GraphicsHelper> graphics, const shared_ptr<Deck> deck, const shared_ptr<bool> choosingColor) : Player(positionOfFirstCard, graphics)
+HumanPlayer::HumanPlayer(const Vector2f positionOfFirstCard, GraphicsHelper & graphics, const shared_ptr<bool> choosingColor) : Player(positionOfFirstCard, graphics)
 {
-	this->deck = deck;
 	this->choosingColor = choosingColor;
 }
 
@@ -20,26 +19,26 @@ bool HumanPlayer::tryChooseAColor(shared_ptr<CardFunctionColor> colorToBePlayed,
 	return false;
 }
 	
-void HumanPlayer::takeCards(vector<unique_ptr<Card>>& cards)
+void HumanPlayer::takeCards(vector<unique_ptr<Card>>& cards, GraphicsHelper & graphics)
 {
 	for (int i = 0; i < this->cards.size(); i++)
 	{
-		graphics->setPositionRelativeToCardSize(this->cards[i].sprite, PositionOfFirstCard.x + i * 100, PositionOfFirstCard.y);
+		graphics.setPositionRelativeToCardSize(this->cards[i].sprite, PositionOfFirstCard.x + i * 100, PositionOfFirstCard.y);
 	}
 	for (int i = 0; i < cards.size(); ++i)
 	{
 		CardSprite cardSprite = CardSprite(move(cards[i]));
-		graphics->scaleCardSize(cardSprite.sprite);
-		graphics->setPositionRelativeToCardSize(cardSprite.sprite, PositionOfFirstCard.x + this->cards.size() * 100, PositionOfFirstCard.y);
+		graphics.scaleCardSize(cardSprite.sprite);
+		graphics.setPositionRelativeToCardSize(cardSprite.sprite, PositionOfFirstCard.x + this->cards.size() * 100, PositionOfFirstCard.y);
 		this->cards.push_back(move(cardSprite));
 	}
 }
 
-void HumanPlayer::checkPlayersCards()
+void HumanPlayer::checkPlayersCards(GraphicsHelper & graphics)
 {
 	for (int i = 0; i < cards.size(); i++)
 	{
-		graphics->setPositionRelativeToCardSize(cards[i].sprite, PositionOfFirstCard.x + i * 100, PositionOfFirstCard.y);
+		graphics.setPositionRelativeToCardSize(cards[i].sprite, PositionOfFirstCard.x + i * 100, PositionOfFirstCard.y);
 	}
 	if (cards.empty())
 	{
@@ -132,9 +131,9 @@ bool HumanPlayer::canUseThisCard(CardSprite& card, const ColorNumber& topDeckCar
 	return false;
 }
 
-bool HumanPlayer::tryTakeACard()
+bool HumanPlayer::tryTakeACard(Deck & deck)
 {
-	for (auto& card : deck->sprites)
+	for (auto& card : deck.sprites)
 	{
 		if (isSpriteClicked(card))
 		{
