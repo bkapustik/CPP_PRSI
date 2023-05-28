@@ -54,10 +54,17 @@ void Menu::displayGame()
 {
 	if (clock->getElapsedTime() > seconds(secondsToWaitBetweenEachRound) && gameManager.userInputReceived)
 	{
-		gameManager.playOneTurn(graphics, deck, isHumanChoosingColor);
-		if (gameManager.Players.size() <= 1)
+		if (gameManager.PlayerHasFinished)
 		{
-			gameState = GameState::playerLost;
+			gameState = GameState::playerWon;
+		}
+		else 
+		{
+			gameManager.playOneTurn(graphics, deck, isHumanChoosingColor);
+			if (gameManager.Players.size() <= 1)
+			{
+				gameState = GameState::playerLost;
+			}
 		}
 		clock->restart();
 	}

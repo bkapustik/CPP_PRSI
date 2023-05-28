@@ -30,10 +30,6 @@ int main()
 				if (!menu.gameManager.userInputReceived)
 				{
 					menu.playOneTurn();
-					if (menu.gameManager.PlayerHasFinished)
-					{
-						menu.gameState = GameState::playerWon;
-					}
 
 					clock->restart();
 				}

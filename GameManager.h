@@ -31,7 +31,7 @@ private:
 	void evaluateLeafBotCard();
 	void giveNCardsToPlayer(shared_ptr<Player> player, int n, Deck & deck, GraphicsHelper & graphics);
 	void removeFinishedPlayer();
-	void checkUserInputRecieved();
+	void checkUserInputRecieved(shared_ptr<Player> & player);
 	void evaluatePlayedCard(const unique_ptr<Card>& card);
 public:
 	GameManager();

@@ -114,7 +114,6 @@ void GameManager::humanSkip()
 {
 	NumberOfPlayersSkippedByAce--;
 	userInputReceived = true;
-	checkUserInputRecieved();
 }
 
 void GameManager::humanTakeCards(GraphicsHelper & graphics, Deck & deck)
@@ -122,7 +121,6 @@ void GameManager::humanTakeCards(GraphicsHelper & graphics, Deck & deck)
 	giveNCardsToPlayer(Players[PlayerOnTurn], CardsToTake, deck, graphics);
 	CardsToTake = 0;
 	userInputReceived = true;
-	checkUserInputRecieved();
 }
 
 void GameManager::playOneTurn(GraphicsHelper & graphics, Deck & deck, bool & choosingColor)
@@ -191,6 +189,12 @@ void GameManager::playOneTurn(GraphicsHelper & graphics, Deck & deck, bool & cho
 			}
 			userInputReceived = true;
 		}
+		playerOnTurn->checkPlayersCards(graphics);
+		
+		if(playerOnTurn->hasFinished)
+		{
+			PlayerHasFinished = true;
+		}
 	}
 	else
 	{
@@ -239,15 +243,14 @@ void GameManager::playOneTurn(GraphicsHelper & graphics, Deck & deck, bool & cho
 		}
 	}
 	playerOnTurn->checkPlayersCards(graphics);
-	checkUserInputRecieved();
+	checkUserInputRecieved(playerOnTurn);
 }
 
-void GameManager::checkUserInputRecieved()
+void GameManager::checkUserInputRecieved(shared_ptr<Player> & player)
 {
-	auto playerOnTurn = Players[PlayerOnTurn];
 	if (userInputReceived)
 	{
-		if (playerOnTurn->hasFinished)
+		if (player->hasFinished)
 		{
 			removeFinishedPlayer();
 		}
@@ -255,11 +258,6 @@ void GameManager::checkUserInputRecieved()
 		{
 			PlayerOnTurn++;
 		}
-		playerOnTurn->cancelIsOnTurn();
-
-		if (RealPlayer->hasFinished)
-		{
-			PlayerHasFinished = true;
-		}
+		player->cancelIsOnTurn();
 	}
 }
