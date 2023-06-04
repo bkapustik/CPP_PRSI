@@ -110,8 +110,31 @@ vector<unique_ptr<Card>> Opener::getCards() const
 			auto functionColor = nameToColor(color);
 			auto functionNumber = nameToNumber(name);
 
-			auto card = make_unique<Card>(functionNumber, functionColor, move(texture));
-			cards.push_back(move(card));
+			if (name == "seven")
+			{
+				auto card = make_unique<SevenCard>(functionNumber, functionColor, move(texture));
+				cards.push_back(move(card));
+			}
+			else if (name == "top")
+			{
+				auto card = make_unique<TopCard>(functionNumber, functionColor, move(texture));
+				cards.push_back(move(card));
+			}
+			else if (name == "ace")
+			{
+				auto card = make_unique<AceCard>(functionNumber, functionColor, move(texture));
+				cards.push_back(move(card));
+			}
+			else if (name == "bot" && color == "Green")
+			{
+				auto card = make_unique<GreenBottomCard>(functionNumber, functionColor, move(texture));
+				cards.push_back(move(card));
+			}
+			else 
+			{
+				auto card = make_unique<Card>(functionNumber, functionColor, move(texture));
+				cards.push_back(move(card));
+			}
 		}
 	}
 

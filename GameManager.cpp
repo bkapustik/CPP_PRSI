@@ -5,25 +5,21 @@ GameManager::GameManager()
 	
 }
 
-GameManager::GameManager(int numberOfPlayers, Deck & deck, GraphicsHelper & graphics, const vector<shared_ptr<ColorSprite>> colorSprites)
+GameManager::GameManager(int numberOfPlayers, GameMenuDto & menu, const vector<shared_ptr<ColorSprite>> colorSprites)
 {
 	numberOfPlayers = 4;
-	deck.shuffle();
-	CardsToTake = 0;
-	NumberOfPlayersSkippedByAce = 0;
+	menu.deck.shuffle();
 	NumberOfPlayers = numberOfPlayers;
 	this->colorSprites = colorSprites;
-	TopHasBeenPlayed = false;
-	ColorToBePlayed = make_shared<CardFunctionColor>(CardFunctionColor::heart);
 
-	RealPlayer = make_shared<HumanPlayer>(HumanPlayer(Vector2f(graphics.ScreenWidth / 2 - 300, graphics.ScreenHeight - 200), graphics));
+	RealPlayer = make_shared<HumanPlayer>(HumanPlayer(Vector2f(menu.graphics.ScreenWidth / 2 - 300, menu.graphics.ScreenHeight - 200), menu.graphics));
 	Players.push_back(RealPlayer);
 	
-	vector<Vector2f> positionOfFirstCardSpriteOfPlayer{ Vector2f(200, 200), Vector2f(graphics.ScreenWidth/2, 200), Vector2f(graphics.ScreenWidth - 300, 200) };
+	vector<Vector2f> positionOfFirstCardSpriteOfPlayer{ Vector2f(200, 200), Vector2f(menu.graphics.ScreenWidth/2, 200), Vector2f(menu.graphics.ScreenWidth - 300, 200) };
 
 	for (int i = 0; i < numberOfPlayers-1; i++)
 	{
-		Players.push_back(make_shared<ComputerPlayer>(ComputerPlayer(positionOfFirstCardSpriteOfPlayer[i], graphics)));
+		Players.push_back(make_shared<ComputerPlayer>(ComputerPlayer(positionOfFirstCardSpriteOfPlayer[i], menu.graphics)));
 	}
 	
 	PlayerOnTurn = Helper::randomInRange(numberOfPlayers);
@@ -32,44 +28,17 @@ GameManager::GameManager(int numberOfPlayers, Deck & deck, GraphicsHelper & grap
 
 	for (auto player : Players)
 	{
-		giveNCardsToPlayer(player, numberOfCardsAtTheBeginning, deck, graphics);
+		giveNCardsToPlayer(player, numberOfCardsAtTheBeginning, menu);
 	}
 
 	playerEvent = notPlaying;
 }
 
-void GameManager::giveNCardsToPlayer(shared_ptr<Player> player, int n, Deck & deck, GraphicsHelper & graphics)
+void GameManager::giveNCardsToPlayer(shared_ptr<Player> player, int n, GameMenuDto & menu)
 {
-	vector<unique_ptr<Card>> cardsTaken = deck.getNCards(n);
+	vector<unique_ptr<Card>> cardsTaken = menu.deck.getNCards(n);
 
-	player->takeCards(cardsTaken, graphics);
-}
-
-void GameManager::evaluateCardWithNumberSeven()
-{
-	CardsToTake += 3;
-}
-
-void GameManager::evaluateLeafBotCard()
-{
-	CardsToTake = 0;
-}
-
-void GameManager::evaluateCardTakingCancellingCard(const unique_ptr<Card>& card)
-{
-	if (card->Number == CardFunctionNumber::seven)
-	{
-		evaluateCardWithNumberSeven();
-	}
-	else
-	{
-		evaluateLeafBotCard();
-	}
-}
-
-void GameManager::evaluateSkippingCard()
-{
-	NumberOfPlayersSkippedByAce++;
+	player->takeCards(cardsTaken, menu.graphics);
 }
 
 void GameManager::removeFinishedPlayer()
@@ -88,42 +57,26 @@ void GameManager::removeFinishedPlayer()
 	Players = newPlayersInGame;
 }
 
-void GameManager::evaluateTopCard()
-{
-	TopHasBeenPlayed = true;
-}
-
-void GameManager::evaluatePlayedCard(const unique_ptr<Card>& card)
-{
-	if (card->Number == CardFunctionNumber::seven)
-	{
-		evaluateCardWithNumberSeven();
-	}
-	else if (card->Number == CardFunctionNumber::top)
-	{
-		//No need to change desired color. It was changed when we executed tryPlayACard() on player
-		evaluateTopCard();
-	}
-	else if (card->Number == CardFunctionNumber::ace)
-	{
-		evaluateSkippingCard();
-	}
-}
-
 void GameManager::humanSkip()
 {
-	NumberOfPlayersSkippedByAce--;
+	gameData.NumberOfPlayersSkippedByAce--;
 	userInputReceived = true;
 }
 
-void GameManager::humanTakeCards(GraphicsHelper & graphics, Deck & deck)
+void GameManager::humanTakeCards(GameMenuDto & menu)
 {
-	giveNCardsToPlayer(Players[PlayerOnTurn], CardsToTake, deck, graphics);
-	CardsToTake = 0;
+	giveNCardsToPlayer(Players[PlayerOnTurn], gameData.CardsToTake, menu);
+	gameData.CardsToTake = 0;
 	userInputReceived = true;
 }
 
-void GameManager::playOneTurn(GraphicsHelper & graphics, Deck & deck, bool & choosingColor)
+void GameManager::evaluateCard(unique_ptr<Card> card, GameMenuDto & menu)
+{
+	card->evaluate(gameData);
+	menu.deck.addACard(move(card), menu.graphics);
+}
+
+void GameManager::playOneTurn(GameMenuDto & menu, bool & choosingColor)
 {
 	//makes the player on turn play
 	if (NumberOfPlayers <= 1)
@@ -135,16 +88,16 @@ void GameManager::playOneTurn(GraphicsHelper & graphics, Deck & deck, bool & cho
 
 	unique_ptr<Card> playedCard = make_unique<Card>();
 
-	auto topCard = ColorNumber(deck.frontDeckCard->card->Color, deck.frontDeckCard->card->Number);
+	auto topCard = ColorNumber(menu.deck.frontDeckCard->card->Color, menu.deck.frontDeckCard->card->Number);
 
 	playerOnTurn->setOnTurn();
 	if (playerOnTurn->wantsCustomTurn() || !userInputReceived)
 	{
-		if (NumberOfPlayersSkippedByAce > 0)
+		if (gameData.NumberOfPlayersSkippedByAce > 0)
 		{
 			playerEvent = beingSkipped;
 		}
-		else if (CardsToTake > 0)
+		else if (gameData.CardsToTake > 0)
 		{
 			playerEvent = hasToTakeACard;
 		}
@@ -156,40 +109,36 @@ void GameManager::playOneTurn(GraphicsHelper & graphics, Deck & deck, bool & cho
 		userInputReceived = false;
 		if (choosingColor)
 		{
-			if (playerOnTurn->tryChooseAColor(ColorToBePlayed, colorSprites))
+			if (playerOnTurn->tryChooseAColor(gameData.ColorToBePlayed, colorSprites))
 			{
 				choosingColor = false;
 				userInputReceived = true;
 			}
 		}
 
-		if (playerOnTurn->tryPlayACard(playedCard, topCard, TopHasBeenPlayed, ColorToBePlayed, CardsToTake, NumberOfPlayersSkippedByAce, choosingColor))
+		if (playerOnTurn->tryPlayACard(playedCard, topCard, gameData, choosingColor))
 		{
-			evaluatePlayedCard(playedCard);
-			if (playedCard->Color == CardFunctionColor::leaf && playedCard->Number == CardFunctionNumber::bot)
-			{
-				evaluateLeafBotCard();
-			}
+			evaluateCard(move(playedCard), menu);
+
 			if (!choosingColor)
 			{
 				userInputReceived = true;
 			}
-			deck.addACard(move(playedCard), graphics);
 		}
-		else if (playerOnTurn->tryTakeACard(deck))
+		else if (playerOnTurn->tryTakeACard(menu.deck))
 		{
-			if (NumberOfPlayersSkippedByAce > 0)
+			if (gameData.NumberOfPlayersSkippedByAce > 0)
 			{
-				NumberOfPlayersSkippedByAce--;
+				gameData.NumberOfPlayersSkippedByAce--;
 			}
 			else
 			{
-				giveNCardsToPlayer(playerOnTurn, CardsToTake > 0 ? CardsToTake : 1, deck, graphics);
-				CardsToTake = 0;
+				giveNCardsToPlayer(playerOnTurn, gameData.CardsToTake > 0 ? gameData.CardsToTake : 1, menu);
+				gameData.CardsToTake = 0;
 			}
 			userInputReceived = true;
 		}
-		playerOnTurn->checkPlayersCards(graphics);
+		playerOnTurn->checkPlayersCards(menu.graphics);
 		
 		if(playerOnTurn->hasFinished)
 		{
@@ -199,50 +148,48 @@ void GameManager::playOneTurn(GraphicsHelper & graphics, Deck & deck, bool & cho
 	else
 	{
 		playerEvent = notPlaying;
-		if (CardsToTake > 0)
+		if (gameData.CardsToTake > 0)
 		{
 			unique_ptr<Card> cancellingCard = make_unique<Card>();
 
 			if (playerOnTurn->tryCanCancelTakingACard(cancellingCard))
 			{
-				evaluateCardTakingCancellingCard(cancellingCard);
-				deck.addACard(move(cancellingCard), graphics);
+				evaluateCard(move(cancellingCard), menu);
 			}
 			else
 			{
-				giveNCardsToPlayer(playerOnTurn, CardsToTake, deck, graphics);
-				CardsToTake = 0;
+				giveNCardsToPlayer(playerOnTurn, gameData.CardsToTake, menu);
+				gameData.CardsToTake = 0;
 			}
 		}
 
-		else if (NumberOfPlayersSkippedByAce > 0)
+		else if (gameData.NumberOfPlayersSkippedByAce > 0)
 		{
 			unique_ptr<Card> cancellingCard = make_unique<Card>();
 
 			if (playerOnTurn->tryCanCancelBeingSkipped(cancellingCard))
 			{
-				evaluateSkippingCard();
-				deck.addACard(move(cancellingCard), graphics);
+				evaluateCard(move(cancellingCard), menu);
 			}
 			else
 			{
-				NumberOfPlayersSkippedByAce--;
+				gameData.NumberOfPlayersSkippedByAce--;
 			}
 		}
 
-		else if (playerOnTurn->tryPlayACard(playedCard, topCard, TopHasBeenPlayed, ColorToBePlayed))
+		else if (playerOnTurn->tryPlayACard(playedCard, topCard, gameData.TopHasBeenPlayed, gameData.ColorToBePlayed))
 		{
-			TopHasBeenPlayed = false;
-			evaluatePlayedCard(playedCard);
-			deck.addACard(move(playedCard), graphics);
+			gameData.TopHasBeenPlayed = false;
+			
+			evaluateCard(move(playedCard), menu);
 		}
 		else
 		{
 			//No card to take so the player has to take one
-			giveNCardsToPlayer(playerOnTurn, 1, deck, graphics);
+			giveNCardsToPlayer(playerOnTurn, 1, menu);
 		}
 	}
-	playerOnTurn->checkPlayersCards(graphics);
+	playerOnTurn->checkPlayersCards(menu.graphics);
 	checkUserInputRecieved(playerOnTurn);
 }
 

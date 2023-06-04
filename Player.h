@@ -6,6 +6,7 @@
 #include "Helper.h"
 #include "CardSprite.h"
 #include "ColorNumber.h"
+#include "GameStateData.h"
 
 class Player
 {
@@ -25,7 +26,7 @@ public:
 		return false;
 	}
 
-	bool virtual tryPlayACard(unique_ptr<Card>& cardToPlay, const ColorNumber& topDeckCard, bool & topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait, bool & choosingColor)
+	bool virtual tryPlayACard(unique_ptr<Card>& cardToPlay, const ColorNumber& topDeckCard, GameStateData & gameData, bool & choosingColor)
 	{
 		return false;
 	}

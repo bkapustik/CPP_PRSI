@@ -38,6 +38,5 @@ private:
 
 	vector<unique_ptr<Card>> cardsToVector();
 
-	unique_ptr<Card> deque();
 	Sprite createBackSprite(const int shift, GraphicsHelper & graphics);
 };

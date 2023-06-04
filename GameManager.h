@@ -5,6 +5,8 @@
 #include "HumanPlayer.h"
 #include "ComputerPlayer.h"
 #include "GraphicsHelper.h"
+#include "GameStateData.h"
+#include "GameMenuDto.h"
 
 enum PlayerEvent
 {
@@ -17,25 +19,18 @@ private:
 	
 	int NumberOfPlayers;
 	int PlayerOnTurn;
-	int CardsToTake;
-	int NumberOfPlayersSkippedByAce;
 
-	bool TopHasBeenPlayed;
-	shared_ptr<CardFunctionColor> ColorToBePlayed;
+	GameStateData gameData;
+	
 	shared_ptr<HumanPlayer> RealPlayer;
 
-	void evaluateCardTakingCancellingCard(const unique_ptr<Card>& card);
-	void evaluateSkippingCard();
-	void evaluateCardWithNumberSeven();
-	void evaluateTopCard();
-	void evaluateLeafBotCard();
-	void giveNCardsToPlayer(shared_ptr<Player> player, int n, Deck & deck, GraphicsHelper & graphics);
+	void giveNCardsToPlayer(shared_ptr<Player> player, int n, GameMenuDto & menu);
 	void removeFinishedPlayer();
 	void checkUserInputRecieved(shared_ptr<Player> & player);
-	void evaluatePlayedCard(const unique_ptr<Card>& card);
+	void evaluateCard(unique_ptr<Card> card, GameMenuDto & menu);
 public:
 	GameManager();
-	GameManager(int numberOfPlayers, Deck & deck, GraphicsHelper & graphics, const vector<shared_ptr<ColorSprite>> colorSprites);
+	GameManager(int numberOfPlayers, GameMenuDto & menu, const vector<shared_ptr<ColorSprite>> colorSprites);
 	
 	bool PlayerHasFinished = false;
 	bool userInputReceived = true;
@@ -45,8 +40,7 @@ public:
 	vector<shared_ptr<ColorSprite>> colorSprites;
 	vector<shared_ptr<Player>> Players;
 	
-	void playOneTurn(GraphicsHelper & graphics, Deck & deck, bool & choosingColor);
+	void playOneTurn(GameMenuDto & menu, bool & choosingColor);
 	void humanSkip();
-	void humanTakeCards(GraphicsHelper & graphics, Deck & deck);
+	void humanTakeCards(GameMenuDto & menu);
 };
-

@@ -6,7 +6,7 @@ class ComputerPlayer : public Player
 	public:
 		ComputerPlayer(const Vector2f positionOfFirstCard, GraphicsHelper & graphics);
 
-		bool tryPlayACard(unique_ptr<Card>& cardToPlay, const ColorNumber& topDeckCard, bool & topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait, bool & choosingColor) override
+		bool tryPlayACard(unique_ptr<Card>& cardToPlay, const ColorNumber& topDeckCard, GameStateData & gameData, bool & choosingColor) override
 		{
 			return false;
 		}

@@ -82,13 +82,13 @@ bool HumanPlayer::wantsCustomTurn() const
 	return true;
 }
 
-bool HumanPlayer::canUseThisCard(CardSprite& card, const ColorNumber& topDeckCard, bool & topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait)
+bool HumanPlayer::canUseThisCard(CardSprite& card, const ColorNumber& topDeckCard, GameStateData & gameData)
 {
-	if (topHasBeenPlayed)
+	if (gameData.TopHasBeenPlayed)
 	{
-		if (colorToBePlayed)
+		if (gameData.ColorToBePlayed)
 		{
-			if (card.card->Color == (*colorToBePlayed))
+			if (card.card->Color == (*gameData.ColorToBePlayed))
 			{
 				return true;
 			}
@@ -99,7 +99,7 @@ bool HumanPlayer::canUseThisCard(CardSprite& card, const ColorNumber& topDeckCar
 		}
 		return false;
 	}
-	if (cardsToTake > 0)
+	if (gameData.CardsToTake > 0)
 	{
 		if (card.card->Number == CardFunctionNumber::seven)
 		{
@@ -111,7 +111,7 @@ bool HumanPlayer::canUseThisCard(CardSprite& card, const ColorNumber& topDeckCar
 		}
 		return false;
 	}
-	if (turnsToWait > 0)
+	if (gameData.NumberOfPlayersSkippedByAce > 0)
 	{
 		if (card.card->Number == CardFunctionNumber::ace)
 		{
@@ -142,13 +142,13 @@ bool HumanPlayer::tryTakeACard(Deck & deck)
 	return false;
 }
 
-bool HumanPlayer::tryPlayACard(unique_ptr<Card>& cardToPlay, const ColorNumber& topDeckCard, bool & topHasBeenPlayed, shared_ptr<CardFunctionColor>& colorToBePlayed, int cardsToTake, int turnsToWait, bool & choosingColor)
+bool HumanPlayer::tryPlayACard(unique_ptr<Card>& cardToPlay, const ColorNumber& topDeckCard, GameStateData & gameData , bool & choosingColor)
 {
 	for (int i = 0; i < cards.size(); ++i)
 	{
 		if (isSpriteClicked(cards[i].sprite))
 		{
-			if (canUseThisCard(cards[i], topDeckCard, topHasBeenPlayed, colorToBePlayed, cardsToTake, turnsToWait))
+			if (canUseThisCard(cards[i], topDeckCard, gameData))
 			{
 				cardToPlay = move(cards[i].card);
 				cards.erase(cards.begin() + i);

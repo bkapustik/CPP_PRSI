@@ -4,6 +4,7 @@
 #include "Opener.h"
 #include "Click.h"
 #include "GameManager.h"
+#include "GameStateData.h"
 
 enum class GameState
 {
@@ -29,8 +30,7 @@ private:
 	unique_ptr<Texture> startTexture;
 	unique_ptr<Texture> restartTexture;
 	
-	Deck deck;
-	GraphicsHelper graphics;
+	GameMenuDto menuData;
 	shared_ptr<Texture> cardBackSide;
 	bool isHumanChoosingColor;
 
