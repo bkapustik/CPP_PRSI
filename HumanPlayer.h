@@ -11,7 +11,8 @@ private :
 	bool isSpriteClicked(const Sprite& sprite) const;
 public:
 	HumanPlayer(const Vector2f positionOfFirstCard, GraphicsHelper & graphics);
-	
+	HumanPlayer()
+	{}
 	void takeCards(vector<unique_ptr<Card>>& cards, GraphicsHelper & graphics) override;
 	
 	void checkPlayersCards(GraphicsHelper & graphics) override;

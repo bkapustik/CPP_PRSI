@@ -36,8 +36,10 @@ public:
 	}
 
 	Vector2f PositionOfFirstCard;
+	Player(){}
 	Player(const Vector2f positionOfFirstCard, GraphicsHelper & graphics);
 	vector<CardSprite> cards;
+	
 	void virtual takeCards(vector<unique_ptr<Card>>& cards, GraphicsHelper & graphics);
 	void setOnTurn();
 	bool virtual wantsCustomTurn() const

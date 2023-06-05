@@ -75,12 +75,12 @@ bool Player::tryPlayACard(unique_ptr<Card>& cardToPlay, const ColorNumber& topDe
 		}
 	}
 
-	if (tryReturnCardOfColorAndNumber(topDeckCard.Color, CardFunctionNumber::seven, cardToPlay))
+	if (tryReturnCardOfColorAndNumber(colorToPlay, CardFunctionNumber::seven, cardToPlay))
 	{
 		return true;
 	}
 
-	if (tryReturnCardOfColorAndNumber(topDeckCard.Color, CardFunctionNumber::ace, cardToPlay))
+	if (tryReturnCardOfColorAndNumber(colorToPlay, CardFunctionNumber::ace, cardToPlay))
 	{
 		return true;
 	}

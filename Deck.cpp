@@ -29,7 +29,7 @@ Deck::Deck(vector<unique_ptr<Card>>& cards, GraphicsHelper & graphics)
 	mt19937 g(rd());
 	std::shuffle(cards.begin(), cards.end(), g);
 
-	for (int i = 0;i < cards.size() - 1; i++)
+	for (int i = 0; i < cards.size() - 1; i++)
 	{
 		Cards.push(move(cards[i]));
 		auto newSprite = make_unique<Sprite>(createBackSprite(i, graphics));
@@ -85,7 +85,7 @@ vector<unique_ptr<Card>> Deck::getNCards(int n)
 	//can not start with card at the start of the deck
 	for (int i = 0; i < n; i++)
 	{
-		if (Cards.size() > 1)
+		if (Cards.size() > 0)
 		{
 			auto card = move(Cards.front());
 			Cards.pop();
