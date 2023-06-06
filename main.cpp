@@ -10,6 +10,7 @@ int main()
 	vector<unique_ptr<TestBase>> tests = vector<unique_ptr<TestBase>>();
 	tests.push_back(make_unique<DeckTests>());
 	tests.push_back(make_unique<PlayerTests>());
+	tests.push_back(make_unique<GameManagerTests>());
 
 	for (int i = 0; i < tests.size(); ++i)
 	{

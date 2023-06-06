@@ -119,6 +119,10 @@ class PlayerTests : public TestBase
         assert(player.hasFinished == false);
         player.checkPlayersCards(graphics);
         assert(player.hasFinished == true);
+
+        assert(humanPlayer.hasFinished == false);
+        humanPlayer.checkPlayersCards(graphics);
+        assert(humanPlayer.hasFinished == true);
     }
 
     void returnCardOfColorAndNumber()
@@ -253,6 +257,17 @@ class PlayerTests : public TestBase
         assert(cardToPlay->Number == CardFunctionNumber::ace);
     }
 
+    void humanTakeCards()
+    {
+        reset();
+
+        auto card = menu.deck.getNCards(2);
+
+        humanPlayer.takeCards(card, graphics);
+
+        assert(humanPlayer.cards.size() == 2);
+    }
+
     void execute() override
     {
         takeCards();   
@@ -262,7 +277,70 @@ class PlayerTests : public TestBase
         returnCardOfNumber();
         aiBasicOrderOfCardPriority();
         aiTopHasBeenPlayed();
+        humanTakeCards();
     }
-
 };
 
+class GameManagerTests : public TestBase
+{
+    GameManager manager;
+public: 
+
+    GameManagerTests() : TestBase()
+    {
+        manager = GameManager(5,menu,vector<shared_ptr<ColorSprite>>());
+    }
+
+    void giveCardToPlayerAt(int index, CardFunctionColor color, CardFunctionNumber number)
+    {
+        manager.Players[index]->cards.push_back(make_unique<Card>(number,color,make_unique<Texture>()));
+    }
+
+    void reset()
+    {
+        manager = GameManager(2,menu,vector<shared_ptr<ColorSprite>>());
+
+        manager.Players = vector<shared_ptr<Player>>();
+
+        manager.Players.push_back(make_shared<Player>());
+        manager.Players.push_back(make_shared<Player>());
+
+        menu.deck.frontDeckCard->card->Color = CardFunctionColor::acorn;
+        menu.deck.frontDeckCard->card->Number = CardFunctionNumber::eight;
+
+        giveCardToPlayerAt(0,CardFunctionColor::bell, CardFunctionNumber::top);
+        giveCardToPlayerAt(0,CardFunctionColor::acorn, CardFunctionNumber::bot);
+        giveCardToPlayerAt(0,CardFunctionColor::heart, CardFunctionNumber::eight);
+
+        giveCardToPlayerAt(1,CardFunctionColor::acorn, CardFunctionNumber::nine);
+        giveCardToPlayerAt(1,CardFunctionColor::bell, CardFunctionNumber::bot);
+        giveCardToPlayerAt(1,CardFunctionColor::heart, CardFunctionNumber::top);
+
+    }
+
+    void playersCards()
+    {
+        for (int i = 0; i < manager.Players.size(); ++i)
+        {
+            assert(manager.Players[i]->cards.size() == 5);
+        }
+    }
+
+    void basicTurn()
+    {
+        reset();
+
+        bool choosingColor = false;
+
+        manager.playOneTurn(menu,choosingColor);
+
+        assert((manager.Players[0]->cards.size() == 2 && manager.Players[1]->cards.size() == 3)
+        || (manager.Players[1]->cards.size() == 2 && manager.Players[0]->cards.size() == 3));
+    }
+
+    void execute() override
+    {
+        playersCards();
+        basicTurn();
+    }
+};
